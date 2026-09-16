@@ -6,14 +6,27 @@
   <title>PromptCraft Studio — 6-Step Cinematic Website & Asset Workflow Builder</title>
   <meta name="description" content="A professional workflow studio to generate cinematic AI image prompts, video motion sequences, FFmpeg processing scripts, website architecture, and master build prompts with 500 industry presets.">
   
-  <!-- Fonts -->
+  <!-- Fonts: Luxury Editorial Serif & Modern Sans / Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Italiana&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Cinematic 35mm Film Grain Overlay -->
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- Real-Time Top Scroll Progress Line -->
+  <div class="scroll-progress-line" id="scrollProgressLine" aria-hidden="true"></div>
+
+  <!-- Luxury Interactive Custom Cursor -->
+  <div class="custom-cursor" id="customCursor" aria-hidden="true">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+    <span class="cursor-badge" id="cursorBadge"></span>
+  </div>
+
   <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
   <div class="ambient-glow glow-bottom-right" aria-hidden="true"></div>
 
@@ -849,41 +862,92 @@
         <div id="tabStoryboard" class="tab-pane" role="tabpanel">
           <div class="storyboard-header">
             <div>
-              <h3>Interactive Storyboard & Cinematic Mockup</h3>
-              <p class="section-intro">Real-time simulation of the 5-stage transformation sequence and the resulting hero scroll experience.</p>
+              <div class="storyboard-badge-row">
+                <span class="badge-pill">AWWWARDS EDITORIAL SIMULATOR</span>
+                <span class="badge-pill gold">REAL-TIME CANVAS ENGINE</span>
+              </div>
+              <h3 class="storyboard-main-title">Interactive Scrollytelling & Visual Metamorphosis</h3>
+              <p class="section-intro">Experience the 5-stage transformation sequence driving the canvas scroll engine. Scrub the timeline or play the continuous sequence.</p>
+            </div>
+            
+            <div class="scrub-controls-bar">
+              <button type="button" class="btn btn-sm btn-primary" id="playStoryboardBtn" title="Play animated metamorphosis sequence">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <span id="playBtnLabel">Play Sequence</span>
+              </button>
+              <div class="scrub-slider-wrap">
+                <span class="scrub-label">Scrub</span>
+                <input type="range" id="storyboardScrubber" min="0" max="100" value="0" step="1" aria-label="Scrub Storyboard Sequence">
+                <span class="scrub-pct" id="scrubPct">0%</span>
+              </div>
             </div>
           </div>
           
           <div class="storyboard-timeline-container" id="storyboardTimeline"></div>
           
-          <div class="live-mockup-wrapper">
+          <div class="live-mockup-wrapper" id="liveMockupWrapper">
             <div class="mockup-header-bar">
-              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-              <span class="mockup-url-pill" id="mockupUrl">https://solaria-estate.live</span>
+              <div class="mockup-dots">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              </div>
+              <span class="mockup-url-pill" id="mockupUrl">https://meerub-beauty-salon.live</span>
+              <span class="mockup-dpr-badge">60 FPS · CANVAS SCRUB</span>
             </div>
             <div class="live-mockup-body" id="liveMockupBody">
               <!-- Live simulated website header -->
               <nav class="mockup-nav">
-                <div class="mockup-brand" id="mockNavBrand">VILLA SOLARIA</div>
+                <div class="mockup-brand" id="mockNavBrand">MEERUB</div>
                 <div class="mockup-links" id="mockNavLinks">
-                  <span>Architecture</span><span>Panorama</span><span>Amenities</span>
+                  <span>Story</span><span>Craftsmanship</span><span>Ritual</span><span>Shades</span>
                 </div>
-                <button type="button" class="mockup-cta" id="mockNavCta">Inquire</button>
+                <button type="button" class="mockup-cta" id="mockNavCta">Acquire</button>
               </nav>
 
-              <!-- Live simulated canvas hero -->
-              <div class="mockup-hero">
-                <div class="mockup-hero-canvas-sim">
-                  <div class="canvas-sphere" id="canvasSphere"></div>
-                  <div class="canvas-particles" id="canvasParticles"></div>
+              <!-- Live simulated canvas hero with 5-stage morphing artwork -->
+              <div class="mockup-hero" id="mockupHeroArea">
+                <div class="mockup-hero-canvas-sim" id="mockCanvasSim">
+                  <!-- Stage 1 Visual: Origin Bud -->
+                  <div class="stage-art stage-art-1 active" id="stageArt1">
+                    <div class="bud-stem"></div>
+                    <div class="bud-core"></div>
+                    <div class="bud-droplet droplet-1"></div>
+                    <div class="bud-droplet droplet-2"></div>
+                  </div>
+                  <!-- Stage 2 Visual: Full Bloom -->
+                  <div class="stage-art stage-art-2" id="stageArt2">
+                    <div class="bloom-petal petal-l"></div>
+                    <div class="bloom-petal petal-r"></div>
+                    <div class="bloom-petal petal-c"></div>
+                    <div class="bloom-glow"></div>
+                  </div>
+                  <!-- Stage 3 Visual: Dissolve Extraction -->
+                  <div class="stage-art stage-art-3" id="stageArt3">
+                    <div class="dissolve-vortex"></div>
+                    <div class="dissolve-particle p1"></div>
+                    <div class="dissolve-particle p2"></div>
+                    <div class="dissolve-particle p3"></div>
+                  </div>
+                  <!-- Stage 4 Visual: Mold Casting -->
+                  <div class="stage-art stage-art-4" id="stageArt4">
+                    <div class="mold-chassis"></div>
+                    <div class="mold-stream"></div>
+                    <div class="mold-glow"></div>
+                  </div>
+                  <!-- Stage 5 Visual: Hero Standing Silhouette -->
+                  <div class="stage-art stage-art-5" id="stageArt5">
+                    <div class="hero-capsule"></div>
+                    <div class="hero-rim-glow"></div>
+                    <div class="hero-specular-light"></div>
+                  </div>
                 </div>
+                
                 <div class="mockup-hero-overlay">
-                  <span class="mock-tag" id="mockTag">LUXURY PRIVATE ESTATE</span>
-                  <h1 class="mock-h1" id="mockH1">VILLA SOLARIA</h1>
-                  <p class="mock-sub" id="mockSub">Where Mediterranean serenity meets architectural majesty.</p>
+                  <span class="mock-tag" id="mockTag">COUTURE BEAUTY ARTISTRY</span>
+                  <h1 class="mock-h1" id="mockH1">MEERUB</h1>
+                  <p class="mock-sub" id="mockSub">A beauty, reimagined through cinematic scroll craft.</p>
                   <div class="mock-scroll-cue">
                     <span class="mouse-icon"></span>
-                    <span>SCROLL TO EXPLORE METAMORPHOSIS</span>
+                    <span id="mockStageIndicator">STAGE 01 / ORIGIN · SCROLL TO METAMORPHOSE</span>
                   </div>
                 </div>
               </div>
@@ -892,12 +956,14 @@
               <div class="mockup-section">
                 <div class="mockup-section-grid">
                   <div class="mock-card">
-                    <h4 id="mockSec1Title">Cantilevered Over Azure Horizons</h4>
-                    <p id="mockSec1Desc">Floor-to-ceiling motorized glass walls slide open smoothly, blending salon interior with travertine terrace.</p>
+                    <div class="card-stage-badge">01 / CRAFT</div>
+                    <h4 id="mockSec1Title">Beauty Details become beauty artistry.</h4>
+                    <p id="mockSec1Desc">Fallen beauty details dissolve into molten red beauty artistry pouring into a chrome beauty salon mold.</p>
                   </div>
                   <div class="mock-card">
-                    <h4 id="mockSec2Title">Bespoke Italian Craftsmanship</h4>
-                    <p id="mockSec2Desc">Carved into the volcanic cliffs of the Amalfi coast, Villa Solaria offers 12,000 square feet of seamless living.</p>
+                    <div class="card-stage-badge">02 / FINISH</div>
+                    <h4 id="mockSec2Title">Beauty Artistry becomes couture.</h4>
+                    <p id="mockSec2Desc">Cooling and setting into a precise matte final look shape in front-on luxury editorial presentation.</p>
                   </div>
                 </div>
               </div>

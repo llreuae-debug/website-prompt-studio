@@ -1316,22 +1316,22 @@ function renderChecklistElements(items) {
 
 function renderStoryboardSimulation(d) {
   const stages = [
-    { num: "01", title: "Genesis", desc: d.scene1 || "Opening scene" },
-    { num: "02", title: "Bloom / Shift", desc: d.scene2 || "Unfolding metamorphosis" },
-    { num: "03", title: "Essence", desc: d.scene3 || "Material extraction" },
-    { num: "04", title: "Sculpting", desc: d.scene4 || "Forging in mold" },
-    { num: "05", title: "Reveal", desc: d.scene5 || "Hero application" }
+    { num: "01", title: "Origin / Bud", desc: fallback(d.scene1, "Opening scene") },
+    { num: "02", title: "Metamorphosis", desc: fallback(d.scene2, "Unfolding bloom expansion") },
+    { num: "03", title: "Extraction", desc: fallback(d.scene3, "Molten material extraction") },
+    { num: "04", title: "Casting / Craft", desc: fallback(d.scene4, "Forging inside mold") },
+    { num: "05", title: "Hero Reveal", desc: fallback(d.scene5, "Hero application & finish") }
   ];
 
   if (storyboardTimeline) {
     storyboardTimeline.innerHTML = stages.map((st, idx) => `
-      <div class="timeline-stage-card ${idx === 2 ? 'active' : ''}">
+      <div class="timeline-stage-card ${idx === currentStageIndex ? 'active' : ''}" data-index="${idx}">
         <div class="stage-header">
-          <span class="stage-num">STAGE ${st.num}</span>
+          <span class="stage-num">0${idx + 1} / STAGE</span>
           <span class="stage-title">${st.title}</span>
         </div>
         <div class="stage-visual-sim">
-          <span style="font-size: 11px; color: #9ca3af; text-align: center; padding: 4px;">🎬 ${st.title}</span>
+          <span style="font-size: 11px; color: var(--accent-gold-light); font-weight: 600; text-align: center; padding: 4px;">🎬 ${st.title}</span>
         </div>
         <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.35; margin-top: 4px;">${st.desc}</p>
       </div>
@@ -1339,24 +1339,26 @@ function renderStoryboardSimulation(d) {
   }
 
   // Update Live Mockup Header & Text
-  const brand = fallback(d.brand, "BRAND");
+  const brand = fallback(d.brand, "MEERUB");
   
   if (mockNavBrand) mockNavBrand.textContent = brand;
-  if (mockTag) mockTag.textContent = `${fallback(d.productType, "SPECIAL EDITION").toUpperCase()}`;
+  if (mockTag) mockTag.textContent = `${fallback(d.productType, "COUTURE BEAUTY ARTISTRY").toUpperCase()}`;
   if (mockH1) mockH1.textContent = fallback(d.headline, brand);
-  if (mockSub) mockSub.textContent = fallback(d.subtitle, "A masterwork of design.");
+  if (mockSub) mockSub.textContent = fallback(d.subtitle, "A beauty, reimagined through cinematic scroll craft.");
   if (mockNavCta) mockNavCta.textContent = fallback(d.cta, "Acquire");
 
-  const navs = fallback(d.nav, "Genesis, Craft, Specs").split(",").map(n => n.trim()).filter(Boolean);
+  const navs = fallback(d.nav, "Story, Craftsmanship, Ritual, Shades").split(",").map(n => n.trim()).filter(Boolean);
   if (mockNavLinks) {
     mockNavLinks.innerHTML = navs.slice(0, 4).map(n => `<span>${n}</span>`).join("");
   }
 
-  if (mockSec1Title) mockSec1Title.textContent = fallback(d.section1Title, "Pure Transformation");
-  if (mockSec1Desc) mockSec1Desc.textContent = fallback(d.scene3, "Material extraction and synthesis.");
-  if (mockSec2Title) mockSec2Title.textContent = fallback(d.section2Title, "Sculpted Object");
-  if (mockSec2Desc) mockSec2Desc.textContent = fallback(d.copy, "Crafted with bespoke materials.");
+  if (mockSec1Title) mockSec1Title.textContent = fallback(d.section1Title, "Beauty Details become beauty artistry.");
+  if (mockSec1Desc) mockSec1Desc.textContent = fallback(d.scene3, "Fallen beauty details dissolve into molten red beauty artistry pouring into a chrome beauty salon mold.");
+  if (mockSec2Title) mockSec2Title.textContent = fallback(d.section2Title, "Beauty Artistry becomes couture.");
+  if (mockSec2Desc) mockSec2Desc.textContent = fallback(d.copy, "Cooling and setting into a precise matte final look shape in front-on luxury editorial presentation.");
   if (mockupUrl) mockupUrl.textContent = `https://${slugify(d.folder || d.brand)}.live`;
+
+  setStoryboardStage(currentStageIndex, false);
 }
 
 // ==========================================================================
@@ -1820,7 +1822,196 @@ themeToggleBtn.addEventListener("click", () => {
 });
 
 // ==========================================================================
-// 7. Initialization
+// 7. Luxury Interactive Enhancements & Scrollytelling Simulator
+// ==========================================================================
+
+let currentStageIndex = 0;
+let isStoryboardPlaying = false;
+let storyboardInterval = null;
+
+function setStoryboardStage(stageIdx, updateScrubber = true) {
+  currentStageIndex = Math.max(0, Math.min(4, stageIdx));
+  
+  // Update timeline cards
+  document.querySelectorAll(".timeline-stage-card").forEach((card, idx) => {
+    card.classList.toggle("active", idx === currentStageIndex);
+  });
+
+  // Update morphing canvas stage artwork
+  for (let i = 1; i <= 5; i++) {
+    const art = document.getElementById(`stageArt${i}`);
+    if (art) art.classList.toggle("active", i === currentStageIndex + 1);
+  }
+
+  // Update Scrubber
+  const scrubber = document.getElementById("storyboardScrubber");
+  const scrubPct = document.getElementById("scrubPct");
+  const pct = currentStageIndex * 25;
+  if (scrubber && updateScrubber) {
+    scrubber.value = pct;
+  }
+  if (scrubPct) {
+    scrubPct.textContent = `${pct}%`;
+  }
+
+  // Update Stage Indicator Text
+  const d = getFormData();
+  const stageLabels = [
+    `STAGE 01 / ORIGIN · ${fallback(d.scene1, "A single centered beautybud on unbroken stem")}`,
+    `STAGE 02 / METAMORPHOSIS · ${fallback(d.scene2, "Complete full bloom expansion")}`,
+    `STAGE 03 / EXTRACTION · ${fallback(d.scene3, "Molten beauty artistry extraction")}`,
+    `STAGE 04 / CRAFT · ${fallback(d.scene4, "Chrome mold casting & precision forging")}`,
+    `STAGE 05 / HERO REVEAL · ${fallback(d.scene5, "Finished standing silhouette & model styling")}`
+  ];
+
+  const indicator = document.getElementById("mockStageIndicator");
+  if (indicator && stageLabels[currentStageIndex]) {
+    indicator.textContent = stageLabels[currentStageIndex].toUpperCase();
+  }
+}
+
+function initStoryboardScroller() {
+  const scrubber = document.getElementById("storyboardScrubber");
+  const scrubPct = document.getElementById("scrubPct");
+  const playBtn = document.getElementById("playStoryboardBtn");
+  const playBtnLabel = document.getElementById("playBtnLabel");
+
+  if (scrubber) {
+    scrubber.addEventListener("input", (e) => {
+      const val = parseInt(e.target.value, 10);
+      if (scrubPct) scrubPct.textContent = `${val}%`;
+      const stage = Math.min(4, Math.floor(val / 20.01));
+      setStoryboardStage(stage, false);
+    });
+  }
+
+  if (playBtn) {
+    playBtn.addEventListener("click", () => {
+      if (isStoryboardPlaying) {
+        clearInterval(storyboardInterval);
+        isStoryboardPlaying = false;
+        if (playBtnLabel) playBtnLabel.textContent = "Play Sequence";
+      } else {
+        isStoryboardPlaying = true;
+        if (playBtnLabel) playBtnLabel.textContent = "Pause Sequence";
+        storyboardInterval = setInterval(() => {
+          let next = (currentStageIndex + 1) % 5;
+          setStoryboardStage(next, true);
+        }, 1800);
+      }
+    });
+  }
+
+  // Timeline card click delegation
+  document.getElementById("storyboardTimeline")?.addEventListener("click", (e) => {
+    const card = e.target.closest(".timeline-stage-card");
+    if (card && typeof card.dataset.index !== "undefined") {
+      setStoryboardStage(parseInt(card.dataset.index, 10), true);
+    }
+  });
+
+  // Interactive 3D Perspective Tilt on Live Mockup
+  const wrapper = document.getElementById("liveMockupWrapper");
+  if (wrapper) {
+    wrapper.addEventListener("mousemove", (e) => {
+      const rect = wrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      const rotX = (y / (rect.height / 2)) * -3.5;
+      const rotY = (x / (rect.width / 2)) * 3.5;
+      wrapper.style.transform = `perspective(1200px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+    });
+
+    wrapper.addEventListener("mouseleave", () => {
+      wrapper.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg)";
+    });
+  }
+}
+
+function initCustomCursor() {
+  const cursor = document.getElementById("customCursor");
+  const badge = document.getElementById("cursorBadge");
+  if (!cursor) return;
+
+  let mouseX = -100, mouseY = -100;
+  let cursorX = -100, cursorY = -100;
+
+  window.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function renderCursor() {
+    cursorX += (mouseX - cursorX) * 0.22;
+    cursorY += (mouseY - cursorY) * 0.22;
+    cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0)`;
+    requestAnimationFrame(renderCursor);
+  }
+  requestAnimationFrame(renderCursor);
+
+  function attachHoverLabels() {
+    document.querySelectorAll(".copy-btn, .highlight-btn").forEach(el => {
+      el.addEventListener("mouseenter", () => {
+        cursor.classList.add("hovering");
+        if (badge) badge.textContent = "COPY";
+      });
+      el.addEventListener("mouseleave", () => {
+        cursor.classList.remove("hovering");
+        if (badge) badge.textContent = "";
+      });
+    });
+
+    document.querySelectorAll(".tab-btn, .workflow-step").forEach(el => {
+      el.addEventListener("mouseenter", () => {
+        cursor.classList.add("hovering");
+        if (badge) badge.textContent = "VIEW";
+      });
+      el.addEventListener("mouseleave", () => {
+        cursor.classList.remove("hovering");
+        if (badge) badge.textContent = "";
+      });
+    });
+
+    document.querySelectorAll("#storyboardScrubber, #playStoryboardBtn, .timeline-stage-card").forEach(el => {
+      el.addEventListener("mouseenter", () => {
+        cursor.classList.add("hovering");
+        if (badge) badge.textContent = "SCRUB";
+      });
+      el.addEventListener("mouseleave", () => {
+        cursor.classList.remove("hovering");
+        if (badge) badge.textContent = "";
+      });
+    });
+
+    document.querySelectorAll("select, .accordion-toggle").forEach(el => {
+      el.addEventListener("mouseenter", () => {
+        cursor.classList.add("hovering");
+        if (badge) badge.textContent = "SELECT";
+      });
+      el.addEventListener("mouseleave", () => {
+        cursor.classList.remove("hovering");
+        if (badge) badge.textContent = "";
+      });
+    });
+  }
+
+  attachHoverLabels();
+}
+
+function initScrollProgress() {
+  const line = document.getElementById("scrollProgressLine");
+  if (!line) return;
+
+  window.addEventListener("scroll", () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    line.style.width = `${Math.min(100, Math.max(0, scrollPercent))}%`;
+  }, { passive: true });
+}
+
+// ==========================================================================
+// 8. Master Initialization
 // ==========================================================================
 
 function init() {
@@ -1830,6 +2021,9 @@ function init() {
   }
 
   populatePresetDropdown();
+  initCustomCursor();
+  initScrollProgress();
+  initStoryboardScroller();
 
   if (typeof presets !== "undefined") {
     if (presets.meerubBeautySalon) {
