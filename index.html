@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptCraft Studio — 6-Step Cinematic Website & Asset Workflow Builder</title>
+  <meta name="description" content="A professional workflow studio to generate cinematic AI image prompts, video motion sequences, FFmpeg processing scripts, website architecture, and master build prompts with 50 industry presets.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-bottom-right" aria-hidden="true"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="brand-group">
+        <div class="brand-badge">
+          <svg class="icon-sparkle" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title-row">
+            <h1 class="brand-title">PromptCraft Studio</h1>
+            <span class="version-tag">50 PRESETS</span>
+          </div>
+          <p class="brand-subtitle">6-Step Cinematic Website & Asset Workflow Engine</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- 50 Presets Selector and Load Button -->
+        <div class="preset-control-wrapper">
+          <label for="presetPicker" class="preset-label">Choose preset</label>
+          <div class="preset-input-row">
+            <select id="presetPicker" class="select-preset" aria-label="Choose preset">
+              <option value="" disabled selected>✨ Choose preset (50 available)...</option>
+            </select>
+            <button id="loadPresetButton" type="button" class="btn btn-secondary" title="Load selected preset into form">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Load preset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Top Generate Action Button -->
+        <button id="topGenerateBtn" type="button" class="btn btn-primary" title="Generate all 6 workflow steps">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span>Generate</span>
+        </button>
+
+        <!-- Top Copy Master Prompt Button -->
+        <button id="topCopyMasterBtn" type="button" class="btn btn-secondary" title="Copy the Master AI Website Prompt">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>Copy Master</span>
+        </button>
+
+        <!-- Light / Dark Theme Toggle Button -->
+        <button id="themeToggleBtn" type="button" class="btn btn-icon" title="Toggle Light/Dark Theme" aria-label="Toggle theme">
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <!-- Quick Export Dropdown -->
+        <div class="dropdown">
+          <button id="exportMenuBtn" type="button" class="btn btn-secondary" aria-haspopup="true" aria-expanded="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Export</span>
+          </button>
+          <div id="exportDropdownMenu" class="dropdown-menu">
+            <button type="button" class="dropdown-item" id="downloadMdBtn">
+              <span class="ext-badge md">.MD</span> Master Plan (Markdown)
+            </button>
+            <button type="button" class="dropdown-item" id="downloadTxtBtn">
+              <span class="ext-badge txt">.TXT</span> Plain Text Plan
+            </button>
+            <button type="button" class="dropdown-item" id="downloadShBtn">
+              <span class="ext-badge sh">.SH</span> FFmpeg Build Script
+            </button>
+            <button type="button" class="dropdown-item" id="exportJsonBtn">
+              <span class="ext-badge json">.JSON</span> Backup Project Config
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workflow Progress Bar -->
+    <div class="workflow-steps-nav">
+      <div class="workflow-step active" data-step="1" role="button" tabindex="0">
+        <span class="step-num">01</span>
+        <span class="step-name">Image Prompts</span>
+      </div>
+      <div class="workflow-divider"></div>
+      <div class="workflow-step" data-step="2" role="button" tabindex="0">
+        <span class="step-num">02</span>
+        <span class="step-name">Video Prompts</span>
+      </div>
+      <div class="workflow-divider"></div>
+      <div class="workflow-step" data-step="3" role="button" tabindex="0">
+        <span class="step-num">03</span>
+        <span class="step-name">FFmpeg Pipeline</span>
+      </div>
+      <div class="workflow-divider"></div>
+      <div class="workflow-step" data-step="4" role="button" tabindex="0">
+        <span class="step-num">04</span>
+        <span class="step-name">Folder Tree</span>
+      </div>
+      <div class="workflow-divider"></div>
+      <div class="workflow-step" data-step="5" role="button" tabindex="0">
+        <span class="step-num">05</span>
+        <span class="step-name">Master Build Prompt</span>
+      </div>
+      <div class="workflow-divider"></div>
+      <div class="workflow-step" data-step="6" role="button" tabindex="0">
+        <span class="step-num">06</span>
+        <span class="step-name">Deploy Checklist</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Layout -->
+  <main class="app-layout">
+    
+    <!-- LEFT PANEL: Interactive Form & Studio Controls -->
+    <section class="form-column">
+      <div class="panel-card form-container">
+        
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Project Specification</h2>
+            <p class="panel-subtitle">Fine-tune your brand, story transformation, camera, and asset pipeline</p>
+          </div>
+          <div class="panel-header-actions">
+            <button id="importJsonBtn" type="button" class="btn-ghost" title="Import Saved Config (.json)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Import</span>
+            </button>
+            <input type="file" id="jsonFileInput" accept=".json" style="display:none;">
+            <button id="resetFormBtn" type="button" class="btn-ghost" title="Reset to Empty or Default">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              <span>Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="builderForm" autocomplete="off">
+          
+          <!-- Accordion 1: Website Idea & Brand -->
+          <div class="accordion-group open" data-accordion="1">
+            <button type="button" class="accordion-toggle" aria-expanded="true">
+              <div class="accordion-title-wrap">
+                <span class="badge-number">1</span>
+                <div>
+                  <span class="accordion-heading">Website & Brand Identity</span>
+                  <span class="accordion-summary">Brand, product concept, target audience & tone</span>
+                </div>
+              </div>
+              <svg class="chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="input-grid">
+                <div class="form-field">
+                  <label for="brand">Brand / Project Name <span class="required">*</span></label>
+                  <input type="text" id="brand" name="brand" placeholder="e.g. BLOOM, CHRONOS, AURA" required value="VILLA SOLARIA">
+                </div>
+                <div class="form-field">
+                  <label for="product">Product or Hero Subject <span class="required">*</span></label>
+                  <input type="text" id="product" name="product" placeholder="e.g. Luxury red lipstick" required value="Cliffside Mediterranean luxury villa in Amalfi">
+                </div>
+                <div class="form-field full-width">
+                  <label for="purpose">Promotion Goal & Hook</label>
+                  <textarea id="purpose" name="purpose" rows="2" placeholder="e.g. A cinematic product launch site highlighting organic rose pigment extraction into a couture chrome bullet.">An exclusive architectural showcase presenting an ultra-prime cliffside estate with infinity pools and private helipad.</textarea>
+                </div>
+                <div class="form-field">
+                  <label for="feeling">Visual Atmosphere / Feeling</label>
+                  <select id="feeling" name="feeling">
+                    <option value="cinematic luxury" selected>💎 Cinematic Luxury & Editorial</option>
+                    <option value="clean modern">✨ Clean Modern & Minimalist</option>
+                    <option value="soft skincare">🌿 Organic Wellness & Soft Botanical</option>
+                    <option value="bold fashion">🔥 Bold Avant-Garde High-Fashion</option>
+                    <option value="futuristic">⚡ Futuristic Cyber & Sci-Fi</option>
+                    <option value="playful">🎨 Vibrant, Pop & Dynamic</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="audience">Target Audience</label>
+                  <input type="text" id="audience" name="audience" placeholder="e.g. Luxury beauty connoisseurs, collectors" value="Ultra-high-net-worth investors, luxury homeowners, international buyers">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 2: Visual & Camera Direction -->
+          <div class="accordion-group open" data-accordion="2">
+            <button type="button" class="accordion-toggle" aria-expanded="true">
+              <div class="accordion-title-wrap">
+                <span class="badge-number">2</span>
+                <div>
+                  <span class="accordion-heading">Visual Art Direction & Optics</span>
+                  <span class="accordion-summary">Color palette, lighting setup, and camera engine</span>
+                </div>
+              </div>
+              <svg class="chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="input-grid">
+                <div class="form-field">
+                  <label for="colors">Color Palette (Comma-separated)</label>
+                  <input type="text" id="colors" name="colors" placeholder="e.g. Warm Travertine, Mediterranean Azure, Champagne Gold, Olive Charcoal" value="Warm Travertine, Mediterranean Azure, Champagne Gold, Olive Charcoal">
+                  <div class="color-chips-preview" id="colorChipsContainer"></div>
+                </div>
+                <div class="form-field">
+                  <label for="background">Studio Environment / Backdrop</label>
+                  <input type="text" id="background" name="background" placeholder="e.g. Golden hour sunset over Amalfi cliffs with warm travertine terraces and glowing infinity pools" value="Golden hour sunset over Amalfi cliffs with warm travertine terraces and glowing infinity pools">
+                </div>
+                <div class="form-field full-width">
+                  <label for="camera">Camera, Lens, Lighting & Color Grading Engine</label>
+                  <textarea id="camera" name="camera" rows="2" placeholder="e.g. ARRI Alexa 65, 85mm T1.5 prime lens, softbox key light, golden rim light, 8k photorealistic...">ARRI Alexa Mini LF, 24mm Ultra Prime lens, golden hour natural light, cinematic drone orbital sweep, 8K architectural grade.</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 3: Hero Story Sequence (Transformation Narrative) -->
+          <div class="accordion-group open" data-accordion="3">
+            <button type="button" class="accordion-toggle" aria-expanded="true">
+              <div class="accordion-title-wrap">
+                <span class="badge-number">3</span>
+                <div>
+                  <span class="accordion-heading">5-Stage Hero Storyboard</span>
+                  <span class="accordion-summary">The visual metamorphosis driving the scroll canvas</span>
+                </div>
+              </div>
+              <svg class="chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="story-stepper">
+                <div class="story-item">
+                  <div class="story-badge">Stage 1</div>
+                  <div class="form-field">
+                    <label for="scene1">Opening Genesis Shot</label>
+                    <input type="text" id="scene1" name="scene1" placeholder="Initial raw state or organic origin..." value="A dramatic aerial drone view of rugged Mediterranean coastal cliffs bathed in warm amber sunrise">
+                  </div>
+                </div>
+
+                <div class="story-item">
+                  <div class="story-badge">Stage 2</div>
+                  <div class="form-field">
+                    <label for="scene2">First Metamorphosis / Bloom</label>
+                    <input type="text" id="scene2" name="scene2" placeholder="Unfolding or activation..." value="Camera glides over a cantilevered infinity pool reflecting the golden sea horizon">
+                  </div>
+                </div>
+
+                <div class="story-item">
+                  <div class="story-badge">Stage 3</div>
+                  <div class="form-field">
+                    <label for="scene3">Material Dissolve / Essence Extraction</label>
+                    <input type="text" id="scene3" name="scene3" placeholder="Transformation into liquid/particles..." value="Floor-to-ceiling motorized glass walls slide open smoothly, blending salon interior with travertine terrace">
+                  </div>
+                </div>
+
+                <div class="story-item">
+                  <div class="story-badge">Stage 4</div>
+                  <div class="form-field">
+                    <label for="scene4">Forging / Molding the Product</label>
+                    <input type="text" id="scene4" name="scene4" placeholder="Pigment or material enters mold/chassis..." value="Sunlight cascades through custom Italian walnut louvers across minimalist marble island">
+                  </div>
+                </div>
+
+                <div class="story-item">
+                  <div class="story-badge">Stage 5</div>
+                  <div class="form-field">
+                    <label for="scene5">Hero Reveal & Application</label>
+                    <input type="text" id="scene5" name="scene5" placeholder="Finished piece presented or applied..." value="Night falls as architectural LED lighting illuminates the villa silhouette overlooking moonlit ocean">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 4: Product Specifications & Model Casting -->
+          <div class="accordion-group" data-accordion="4">
+            <button type="button" class="accordion-toggle" aria-expanded="false">
+              <div class="accordion-title-wrap">
+                <span class="badge-number">4</span>
+                <div>
+                  <span class="accordion-heading">Product Specs & Model Casting</span>
+                  <span class="accordion-summary">Materials, tactile textures, and person styling</span>
+                </div>
+              </div>
+              <svg class="chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="input-grid">
+                <div class="form-field">
+                  <label for="productName">Official Product Model Name</label>
+                  <input type="text" id="productName" name="productName" placeholder="e.g. Villa Solaria Amalfi Estate" value="Villa Solaria Amalfi Estate">
+                </div>
+                <div class="form-field">
+                  <label for="productType">Product Classification</label>
+                  <input type="text" id="productType" name="productType" placeholder="e.g. Luxury Private Estate" value="Luxury Private Estate (12,000 sq ft)">
+                </div>
+                <div class="form-field full-width">
+                  <label for="texture">Tactile Textures & Materials</label>
+                  <input type="text" id="texture" name="texture" placeholder="e.g. Hand-chiseled travertine stone, Italian fluted walnut" value="Hand-chiseled travertine stone, Italian fluted walnut, polished Calacatta marble, brushed bronze fixtures">
+                </div>
+                <div class="form-field">
+                  <label for="person">Include Human Model / Lifestyle?</label>
+                  <select id="person" name="person">
+                    <option value="yes" selected>Yes — Include Model / Resident</option>
+                    <option value="no">No — Pure Architectural Structure Only</option>
+                  </select>
+                </div>
+                <div class="form-field" id="personDescField">
+                  <label for="personDescription">Model Appearance & Casting Cue</label>
+                  <input type="text" id="personDescription" name="personDescription" placeholder="e.g. Elegant homeowner in relaxed linen attire standing on terrace gazing at sunset with a crystal wine glass" value="Elegant homeowner in relaxed linen attire standing on terrace gazing at sunset with a crystal wine glass">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 5: Website Text, Nav & Editorial Copy -->
+          <div class="accordion-group" data-accordion="5">
+            <button type="button" class="accordion-toggle" aria-expanded="false">
+              <div class="accordion-title-wrap">
+                <span class="badge-number">5</span>
+                <div>
+                  <span class="accordion-heading">Website Copy & Editorial Structure</span>
+                  <span class="accordion-summary">Headlines, navigation links, section titles, and copy</span>
+                </div>
+              </div>
+              <svg class="chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="input-grid">
+                <div class="form-field">
+                  <label for="headline">Hero Headline</label>
+                  <input type="text" id="headline" name="headline" placeholder="e.g. VILLA SOLARIA" value="VILLA SOLARIA">
+                </div>
+                <div class="form-field">
+                  <label for="subtitle">Hero Subtitle / Tagline</label>
+                  <input type="text" id="subtitle" name="subtitle" placeholder="e.g. Where Mediterranean serenity meets architectural majesty." value="Where Mediterranean serenity meets architectural majesty.">
+                </div>
+                <div class="form-field">
+                  <label for="cta">Call to Action (CTA) Button</label>
+                  <input type="text" id="cta" name="cta" placeholder="e.g. Request Private Viewing" value="Request Private Viewing">
+                </div>
+                <div class="form-field">
+                  <label for="nav">Navigation Links (Comma-separated)</label>
+                  <input type="text" id="nav" name="nav" placeholder="e.g. Architecture, Panorama, Amenities, Acquisition" value="Architecture, Panorama, Amenities, Acquisition">
+                </div>
+                <div class="form-field">
+                  <label for="section1Title">Section 1 Editorial Title</label>
+                  <input type="text" id="section1Title" name="section1Title" placeholder="e.g. Cantilevered Over Azure Horizons" value="Cantilevered Over Azure Horizons">
+                </div>
+                <div class="form-field">
+                  <label for="section2Title">Section 2 Editorial Title</label>
+                  <input type="text" id="section2Title" name="section2Title" placeholder="e.g. Bespoke Italian Craftsmanship" value="Bespoke Italian Craftsmanship">
+                </div>
+                <div class="form-field full-width">
+                  <label for="copy">Core Brand Narrative / Editorial Paragraph</label>
+                  <textarea id="copy" name="copy" rows="2" placeholder="e.g. Carved into the volcanic cliffs of the Amalfi coast...">Carved into the volcanic cliffs of the Amalfi coast, Villa Solaria offers 12,000 square feet of seamless indoor-outdoor living, private sea access, and panoramic Mediterranean vistas.</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 6: Pipeline, Files & Build Choices -->
+          <div class="accordion-group" data-accordion="6">
+            <button type="button" class="accordion-toggle" aria-expanded="false">
+              <div class="accordion-title-wrap">
+                <span class="badge-number">6</span>
+                <div>
+                  <span class="accordion-heading">Asset Pipeline & Code Architecture</span>
+                  <span class="accordion-summary">File naming conventions, framework stack, counts & hosting</span>
+                </div>
+              </div>
+              <svg class="chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="input-grid">
+                <div class="form-field">
+                  <label for="prefix">Asset Filename Slug / Prefix</label>
+                  <input type="text" id="prefix" name="prefix" placeholder="e.g. solaria" value="solaria">
+                  <span class="input-hint">Used for all image, video, and frame naming</span>
+                </div>
+                <div class="form-field">
+                  <label for="folder">Project Root Folder Name</label>
+                  <input type="text" id="folder" name="folder" placeholder="e.g. villa-solaria-estate" value="villa-solaria-estate">
+                </div>
+                <div class="form-field">
+                  <label for="imageCount">Image Prompt Count</label>
+                  <select id="imageCount" name="imageCount">
+                    <option value="6">6 Core Scenes</option>
+                    <option value="8" selected>8 Full Cinematic Arc (Recommended)</option>
+                    <option value="10">10 Extended Editorial Suite</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="videoCount">Video Clip Count</label>
+                  <select id="videoCount" name="videoCount">
+                    <option value="5">5 Motion Clips</option>
+                    <option value="6" selected>6 Seamless Clips (Recommended)</option>
+                    <option value="7">7 Extended Sequence</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="codeStyle">Target Frontend Stack</label>
+                  <select id="codeStyle" name="codeStyle">
+                    <option value="vanilla HTML, CSS, and JavaScript" selected>Vanilla HTML5, CSS3 & JavaScript (Zero-dependency)</option>
+                    <option value="React with Tailwind CSS and Framer Motion">React + Tailwind CSS + Framer Motion</option>
+                    <option value="Next.js with TypeScript and GSAP ScrollTrigger">Next.js + TypeScript + GSAP ScrollTrigger</option>
+                    <option value="Vite + Vue 3">Vite + Vue 3 + Tailwind</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="hosting">Target Deployment Platform</label>
+                  <select id="hosting" name="hosting">
+                    <option value="Netlify" selected>Netlify (Drag & Drop or Git)</option>
+                    <option value="Vercel">Vercel</option>
+                    <option value="Cloudflare Pages">Cloudflare Pages</option>
+                    <option value="GitHub Pages">GitHub Pages</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 7: Quality Safeguards & Negative Prompts -->
+          <div class="accordion-group" data-accordion="7">
+            <button type="button" class="accordion-toggle" aria-expanded="false">
+              <div class="accordion-title-wrap">
+                <span class="badge-number">7</span>
+                <div>
+                  <span class="accordion-heading">Negative Prompts & Quality Guardrails</span>
+                  <span class="accordion-summary">Eliminate AI artifacts, watermarks, and distortions</span>
+                </div>
+              </div>
+              <svg class="chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-body">
+              <div class="input-grid">
+                <div class="form-field full-width">
+                  <label for="avoid">Negative Prompt Filters & Artifact Suppression</label>
+                  <textarea id="avoid" name="avoid" rows="2" placeholder="e.g. No cluttered interior, no distorted windows...">No cluttered interior, no distorted windows, no watermark, no wide-angle lens fisheye distortion, no cartoon look.</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-bottom-actions">
+            <button type="submit" class="btn btn-primary btn-lg" id="submitFormBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span>Regenerate All 6 Workflow Steps</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Multi-Tab Output & Live Studio -->
+    <section class="output-column">
+      <div class="panel-card output-container">
+        
+        <!-- Output Navigation Tabs -->
+        <div class="output-tabs-header">
+          <div class="tab-list" role="tablist">
+            <button type="button" class="tab-btn active" role="tab" data-tab="cards" aria-selected="true">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Modular Cards</span>
+            </button>
+            <button type="button" class="tab-btn" role="tab" data-tab="doc" aria-selected="false">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>Unified Document</span>
+            </button>
+            <button type="button" class="tab-btn" role="tab" data-tab="storyboard" aria-selected="false">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+              <span>Storyboard Preview</span>
+            </button>
+            <button type="button" class="tab-btn" role="tab" data-tab="terminal" aria-selected="false">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+              <span>FFmpeg Terminal</span>
+            </button>
+            <button type="button" class="tab-btn" role="tab" data-tab="checklist" aria-selected="false">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Checklist</span>
+            </button>
+          </div>
+
+          <div class="output-quick-actions">
+            <button id="copyActiveTabBtn" type="button" class="btn btn-sm btn-secondary" title="Copy current tab view content">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Metric Badges Bar -->
+        <div class="metrics-bar">
+          <div class="metric-item">
+            <span class="metric-label">Project</span>
+            <span class="metric-value" id="metricBrand">VILLA SOLARIA</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Images</span>
+            <span class="metric-value" id="metricImages">8 prompts</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Videos</span>
+            <span class="metric-value" id="metricVideos">6 clips</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Est. Tokens</span>
+            <span class="metric-value highlight" id="metricTokens">~2,450</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Prompt Score</span>
+            <span class="badge-score" id="metricScore">98/100 (Optimal)</span>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT 1: MODULAR CARDS VIEW -->
+        <div id="tabCards" class="tab-pane active" role="tabpanel">
+          
+          <!-- Section 1: Image Prompts -->
+          <div class="output-section" id="sectionImages">
+            <div class="section-title-row">
+              <div class="section-badge-title">
+                <span class="step-pill">Step 1</span>
+                <h3>AI Image Prompts (Reference Chaining)</h3>
+              </div>
+              <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="allImagesText">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy All Prompts</span>
+              </button>
+            </div>
+            <p class="section-intro">Generate these images sequentially. Keep consistent optical lighting and background. Use previous images as character/style references.</p>
+            <div class="cards-grid" id="imageCardsContainer"></div>
+          </div>
+
+          <!-- Section 2: Video Prompts -->
+          <div class="output-section" id="sectionVideos">
+            <div class="section-title-row">
+              <div class="section-badge-title">
+                <span class="step-pill">Step 2</span>
+                <h3>AI Video Motion Prompts (Start/End Frames)</h3>
+              </div>
+              <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="allVideosText">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy All Video Prompts</span>
+              </button>
+            </div>
+            <p class="section-intro">Generate slow cinematic clips using the corresponding generated start and end frame images (Runway Gen-3, Luma Dream Machine, Kling, Minimax, Sora).</p>
+            <div class="cards-grid" id="videoCardsContainer"></div>
+          </div>
+
+          <!-- Section 3: Merge & Prepare Instructions -->
+          <div class="output-section" id="sectionMerge">
+            <div class="section-title-row">
+              <div class="section-badge-title">
+                <span class="step-pill">Step 3</span>
+                <h3>FFmpeg Merge & Scroll Frame Extraction</h3>
+              </div>
+              <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="ffmpegScriptText">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy Commands</span>
+              </button>
+            </div>
+            <div class="code-terminal-card" id="ffmpegCardsContainer"></div>
+          </div>
+
+          <!-- Section 4: Folder Structure -->
+          <div class="output-section" id="sectionFolder">
+            <div class="section-title-row">
+              <div class="section-badge-title">
+                <span class="step-pill">Step 4</span>
+                <h3>Project Asset Folder Architecture</h3>
+              </div>
+              <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="folderTreeText">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy Tree</span>
+              </button>
+            </div>
+            <div class="folder-tree-card" id="folderStructureContainer"></div>
+          </div>
+
+          <!-- Section 5: Full Master Build Prompt -->
+          <div class="output-section" id="sectionBuildPrompt">
+            <div class="section-title-row">
+              <div class="section-badge-title">
+                <span class="step-pill">Step 5</span>
+                <h3>Full Master AI Website Build Prompt</h3>
+              </div>
+              <button type="button" class="btn-ghost-sm copy-btn highlight-btn" data-copy-target="masterPromptText">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy Master Prompt</span>
+              </button>
+            </div>
+            <p class="section-intro">Paste this comprehensive prompt directly into your AI Assistant (Antigravity, Claude, Cursor, ChatGPT) to generate the entire web application codebase.</p>
+            <div class="master-prompt-box">
+              <pre id="masterPromptDisplay"></pre>
+            </div>
+          </div>
+
+          <!-- Section 6: Deploy Checklist -->
+          <div class="output-section" id="sectionDeployChecklist">
+            <div class="section-title-row">
+              <div class="section-badge-title">
+                <span class="step-pill">Step 6</span>
+                <h3>Pre-Flight & Production Deploy Checklist</h3>
+              </div>
+              <button type="button" class="btn-ghost-sm" id="resetChecklistBtn">
+                <span>Reset Checkbox States</span>
+              </button>
+            </div>
+            <div class="checklist-grid" id="checklistContainer"></div>
+          </div>
+
+        </div>
+
+        <!-- TAB CONTENT 2: UNIFIED MASTER DOCUMENT VIEW -->
+        <div id="tabDoc" class="tab-pane" role="tabpanel">
+          <div class="doc-toolbar">
+            <span class="doc-status">Formatted Markdown Document</span>
+            <div class="doc-actions">
+              <button type="button" class="btn-sm btn-secondary copy-btn" data-copy-target="rawDocOutput">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy Full Plan</span>
+              </button>
+            </div>
+          </div>
+          <pre id="rawDocOutput" class="raw-doc-pre"></pre>
+        </div>
+
+        <!-- TAB CONTENT 3: STORYBOARD & WEBSITE WIREFRAME PREVIEW -->
+        <div id="tabStoryboard" class="tab-pane" role="tabpanel">
+          <div class="storyboard-header">
+            <div>
+              <h3>Interactive Storyboard & Cinematic Mockup</h3>
+              <p class="section-intro">Real-time simulation of the 5-stage transformation sequence and the resulting hero scroll experience.</p>
+            </div>
+          </div>
+          
+          <div class="storyboard-timeline-container" id="storyboardTimeline"></div>
+          
+          <div class="live-mockup-wrapper">
+            <div class="mockup-header-bar">
+              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              <span class="mockup-url-pill" id="mockupUrl">https://solaria-estate.live</span>
+            </div>
+            <div class="live-mockup-body" id="liveMockupBody">
+              <!-- Live simulated website header -->
+              <nav class="mockup-nav">
+                <div class="mockup-brand" id="mockNavBrand">VILLA SOLARIA</div>
+                <div class="mockup-links" id="mockNavLinks">
+                  <span>Architecture</span><span>Panorama</span><span>Amenities</span>
+                </div>
+                <button type="button" class="mockup-cta" id="mockNavCta">Inquire</button>
+              </nav>
+
+              <!-- Live simulated canvas hero -->
+              <div class="mockup-hero">
+                <div class="mockup-hero-canvas-sim">
+                  <div class="canvas-sphere" id="canvasSphere"></div>
+                  <div class="canvas-particles" id="canvasParticles"></div>
+                </div>
+                <div class="mockup-hero-overlay">
+                  <span class="mock-tag" id="mockTag">LUXURY PRIVATE ESTATE</span>
+                  <h1 class="mock-h1" id="mockH1">VILLA SOLARIA</h1>
+                  <p class="mock-sub" id="mockSub">Where Mediterranean serenity meets architectural majesty.</p>
+                  <div class="mock-scroll-cue">
+                    <span class="mouse-icon"></span>
+                    <span>SCROLL TO EXPLORE METAMORPHOSIS</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live simulated section cards -->
+              <div class="mockup-section">
+                <div class="mockup-section-grid">
+                  <div class="mock-card">
+                    <h4 id="mockSec1Title">Cantilevered Over Azure Horizons</h4>
+                    <p id="mockSec1Desc">Floor-to-ceiling motorized glass walls slide open smoothly, blending salon interior with travertine terrace.</p>
+                  </div>
+                  <div class="mock-card">
+                    <h4 id="mockSec2Title">Bespoke Italian Craftsmanship</h4>
+                    <p id="mockSec2Desc">Carved into the volcanic cliffs of the Amalfi coast, Villa Solaria offers 12,000 square feet of seamless living.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT 4: FFMPEG TERMINAL LAB -->
+        <div id="tabTerminal" class="tab-pane" role="tabpanel">
+          <div class="terminal-intro-box">
+            <h3>FFmpeg Video Automation Terminal</h3>
+            <p>Run these commands locally to convert generated video clips into an ultra-smooth 60fps / 20fps canvas scroll sequence.</p>
+          </div>
+          <div id="terminalLabContent"></div>
+        </div>
+
+        <!-- TAB CONTENT 5: PRODUCTION DEPLOY CHECKLIST -->
+        <div id="tabChecklist" class="tab-pane" role="tabpanel">
+          <div class="checklist-intro-box">
+            <h3>Launch & Quality Assurance Checklist</h3>
+            <p>Every critical checkpoint required before publishing to production.</p>
+          </div>
+          <div id="checklistFullView"></div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="presets.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
