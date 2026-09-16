@@ -81,14 +81,16 @@ let checklistState = JSON.parse(localStorage.getItem("promptcraft_checklist") ||
 function populatePresetDropdown() {
   if (!presetPicker || typeof presets === "undefined") return;
   
-  presetPicker.innerHTML = `<option value="" disabled selected>✨ Choose preset (50 available)...</option>`;
+  presetPicker.innerHTML = `<option value="" disabled selected>✨ Choose preset (500 available)...</option>`;
   
-  Object.entries(presets).forEach(([key, preset]) => {
-    const option = document.createElement("option");
-    option.value = key;
-    option.textContent = preset.label;
-    presetPicker.appendChild(option);
-  });
+  Object.entries(presets)
+    .sort((a, b) => a[1].label.localeCompare(b[1].label))
+    .forEach(([key, preset]) => {
+      const option = document.createElement("option");
+      option.value = key;
+      option.textContent = preset.label;
+      presetPicker.appendChild(option);
+    });
 }
 
 function applyPreset(key) {
@@ -102,10 +104,14 @@ function applyPreset(key) {
     }
   });
 
+  generate();
+  showToast(`Loaded preset: "${preset.label}"!`, "success");
+}
+
+function generate() {
   updatePersonFieldVisibility();
   updateColorChips();
   renderAllOutputs();
-  showToast(`Loaded preset: "${preset.label}"!`, "success");
 }
 
 // ==========================================================================
