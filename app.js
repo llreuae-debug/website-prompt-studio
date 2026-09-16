@@ -93,6 +93,15 @@ let checklistState = JSON.parse(localStorage.getItem("promptcraft_checklist") ||
 // 2. Preset Engine & Dropdown Population
 // ==========================================================================
 
+let currentActivePresetKey = sessionStorage.getItem("promptcraft_active_preset") || "meerubBeautySalon";
+
+function updatePresetUIBadge(labelOrBrand) {
+  const currentPresetBadge = document.getElementById("currentPresetBadge");
+  if (currentPresetBadge) {
+    currentPresetBadge.textContent = labelOrBrand || "Preset";
+  }
+}
+
 function populatePresetDropdown() {
   if (!presetPicker || typeof presets === "undefined") return;
   
@@ -108,10 +117,13 @@ function populatePresetDropdown() {
     });
 }
 
-function applyPreset(key) {
+function applyPreset(key, silent = false) {
   if (typeof presets === "undefined") return;
   const preset = presets[key];
   if (!preset) return;
+
+  currentActivePresetKey = key;
+  sessionStorage.setItem("promptcraft_active_preset", key);
 
   Object.entries(preset).forEach(([field, value]) => {
     if (field !== "label" && form.elements[field]) {
@@ -119,8 +131,26 @@ function applyPreset(key) {
     }
   });
 
+  if (presetPicker) {
+    presetPicker.value = key;
+  }
+
+  const shortName = preset.brand || preset.label.split("(")[0].trim() || "Preset";
+  updatePresetUIBadge(shortName);
+
   generate();
-  showToast(`Loaded preset: "${preset.label}"!`, "success");
+  if (!silent) {
+    showToast(`Loaded preset: "${preset.label}"!`, "success");
+  }
+
+  // Sync active class in preset popover list
+  document.querySelectorAll(".preset-item").forEach(item => {
+    if (item.getAttribute("data-preset-key") === key) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
 }
 
 function generate() {
@@ -2011,7 +2041,278 @@ function initScrollProgress() {
 }
 
 // ==========================================================================
-// 8. Master Initialization
+// 8. Search & Preset Popover Engine
+// ==========================================================================
+
+function initSearchAndPresets() {
+  const searchInput = document.getElementById("presetSearchInput");
+  const clearSearchBtn = document.getElementById("clearSearchBtn");
+  const choosePresetBtn = document.getElementById("choosePresetBtn");
+  const presetPopoverMenu = document.getElementById("presetPopoverMenu");
+  const presetPopoverList = document.getElementById("presetPopoverList");
+  const presetCountBadge = document.getElementById("presetCountBadge");
+  const filterChips = document.querySelectorAll(".quick-filter-chip");
+  const popoverCustomBtn = document.getElementById("popoverCustomBtn");
+  const popoverResetBtn = document.getElementById("popoverResetBtn");
+
+  if (!presetPopoverList || typeof presets === "undefined") return;
+
+  let activeCategory = "all";
+  let activeSearchQuery = "";
+  let highlightedIndex = -1;
+
+  // Categorization classifier
+  function getPresetCategory(key, p) {
+    const text = `${key} ${p.label || ""} ${p.brand || ""} ${p.product || ""} ${p.feeling || ""}`.toLowerCase();
+    if (text.includes("beauty") || text.includes("salon") || text.includes("lipstick") || text.includes("cosmetic") || text.includes("perfume") || text.includes("fragrance") || text.includes("skincare") || text.includes("glow") || text.includes("serum") || text.includes("couture") || text.includes("velvet") || text.includes("spa")) {
+      return "beauty";
+    }
+    if (text.includes("tech") || text.includes("auto") || text.includes("electric") || text.includes("supercar") || text.includes("cyber") || text.includes("ai") || text.includes("audio") || text.includes("robot") || text.includes("drone") || text.includes("titanium") || text.includes("neon") || text.includes("vr") || text.includes("quantum")) {
+      return "tech";
+    }
+    return "luxury";
+  }
+
+  // Pre-index all 500 presets
+  const presetEntries = Object.entries(presets).map(([key, p]) => {
+    const cat = getPresetCategory(key, p);
+    const isFeatured = key === "meerubBeautySalon" || key === "bloomLuxuryLipstick" || key === "realEstateLuxuryVilla" || key.toLowerCase().includes("luxury") || key.toLowerCase().includes("supercar");
+    return {
+      key,
+      preset: p,
+      label: p.label || key,
+      brand: p.brand || "",
+      product: p.product || "",
+      category: cat,
+      isFeatured,
+      searchCorpus: `${p.label} ${p.brand} ${p.product} ${p.feeling || ""} ${cat}`.toLowerCase()
+    };
+  }).sort((a, b) => a.label.localeCompare(b.label));
+
+  function renderList() {
+    const query = activeSearchQuery.trim().toLowerCase();
+    const filtered = presetEntries.filter(item => {
+      // Category filter
+      if (activeCategory === "featured" && !item.isFeatured) return false;
+      if (activeCategory === "beauty" && item.category !== "beauty") return false;
+      if (activeCategory === "luxury" && item.category !== "luxury") return false;
+      if (activeCategory === "tech" && item.category !== "tech") return false;
+      
+      // Search query filter
+      if (query && !item.searchCorpus.includes(query)) return false;
+      return true;
+    });
+
+    if (presetCountBadge) {
+      presetCountBadge.textContent = `${filtered.length} Available`;
+    }
+
+    if (filtered.length === 0) {
+      presetPopoverList.innerHTML = `
+        <div style="padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 12px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 8px; display: block; opacity: 0.5;">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          No matching presets found for "<strong>${escapeHtml(activeSearchQuery)}</strong>"
+        </div>
+      `;
+      return;
+    }
+
+    presetPopoverList.innerHTML = filtered.slice(0, 120).map((item, idx) => {
+      const isActive = item.key === currentActivePresetKey;
+      const catBadge = item.category === "beauty" ? "BEAUTY" : item.category === "tech" ? "TECH" : "LUXURY";
+      return `
+        <button type="button" class="preset-item ${isActive ? 'active' : ''}" data-preset-key="${item.key}" data-index="${idx}" role="menuitem">
+          <span class="preset-item-label">${escapeHtml(item.label)}</span>
+          <span class="preset-item-category">${catBadge}</span>
+        </button>
+      `;
+    }).join("");
+
+    // Attach click listeners to preset items
+    presetPopoverList.querySelectorAll(".preset-item").forEach(itemBtn => {
+      itemBtn.addEventListener("click", () => {
+        const key = itemBtn.getAttribute("data-preset-key");
+        applyPreset(key);
+        closePopover();
+      });
+    });
+
+    highlightedIndex = -1;
+  }
+
+  function openPopover() {
+    if (presetPopoverMenu) {
+      presetPopoverMenu.classList.add("open");
+      choosePresetBtn.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  function closePopover() {
+    if (presetPopoverMenu) {
+      presetPopoverMenu.classList.remove("open");
+      choosePresetBtn.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  function togglePopover() {
+    if (presetPopoverMenu.classList.contains("open")) {
+      closePopover();
+    } else {
+      openPopover();
+    }
+  }
+
+  // Toggle button click
+  if (choosePresetBtn) {
+    choosePresetBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      togglePopover();
+    });
+  }
+
+  // Search input listeners
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      activeSearchQuery = searchInput.value;
+      if (clearSearchBtn) {
+        clearSearchBtn.style.display = activeSearchQuery ? "grid" : "none";
+      }
+      openPopover();
+      renderList();
+    });
+
+    searchInput.addEventListener("focus", () => {
+      openPopover();
+    });
+
+    searchInput.addEventListener("keydown", (e) => {
+      const items = presetPopoverList.querySelectorAll(".preset-item");
+      if (!items.length) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        openPopover();
+        highlightedIndex = (highlightedIndex + 1) % items.length;
+        updateItemHighlight(items);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        openPopover();
+        highlightedIndex = (highlightedIndex - 1 + items.length) % items.length;
+        updateItemHighlight(items);
+      } else if (e.key === "Enter" && highlightedIndex >= 0 && items[highlightedIndex]) {
+        e.preventDefault();
+        items[highlightedIndex].click();
+      } else if (e.key === "Escape") {
+        closePopover();
+      }
+    });
+  }
+
+  function updateItemHighlight(items) {
+    items.forEach((it, idx) => {
+      if (idx === highlightedIndex) {
+        it.classList.add("highlighted");
+        it.scrollIntoView({ block: "nearest" });
+      } else {
+        it.classList.remove("highlighted");
+      }
+    });
+  }
+
+  // Clear search button
+  if (clearSearchBtn) {
+    clearSearchBtn.addEventListener("click", () => {
+      searchInput.value = "";
+      activeSearchQuery = "";
+      clearSearchBtn.style.display = "none";
+      searchInput.focus();
+      renderList();
+    });
+  }
+
+  // Quick filter chips
+  filterChips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      filterChips.forEach(c => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeCategory = chip.getAttribute("data-filter") || "all";
+      renderList();
+    });
+  });
+
+  // Custom Preset button
+  if (popoverCustomBtn) {
+    popoverCustomBtn.addEventListener("click", () => {
+      currentActivePresetKey = "custom";
+      sessionStorage.setItem("promptcraft_active_preset", "custom");
+      updatePresetUIBadge("Custom");
+      closePopover();
+      showToast("Custom mode active: edit any fields freely.", "info");
+    });
+  }
+
+  // Reset to default button
+  if (popoverResetBtn) {
+    popoverResetBtn.addEventListener("click", () => {
+      applyPreset("meerubBeautySalon");
+      closePopover();
+    });
+  }
+
+  // Close popover when clicking outside
+  document.addEventListener("click", (e) => {
+    if (presetPopoverMenu && choosePresetBtn && searchInput) {
+      if (!presetPopoverMenu.contains(e.target) && !choosePresetBtn.contains(e.target) && !searchInput.contains(e.target)) {
+        closePopover();
+      }
+    }
+  });
+
+  // Close popover on Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closePopover();
+    }
+  });
+
+  // Wire footer 3D buttons
+  const footerGenerateBtn = document.getElementById("footerGenerateBtn");
+  const footerCopyMasterBtn = document.getElementById("footerCopyMasterBtn");
+  const footerExportPdfBtn = document.getElementById("footerExportPdfBtn");
+
+  if (footerGenerateBtn) {
+    footerGenerateBtn.addEventListener("click", () => {
+      generate();
+      showToast("Generated full 6-step cinematic workflow!", "success");
+      const outPanel = document.querySelector(".output-panel");
+      if (outPanel) {
+        outPanel.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  }
+
+  if (footerCopyMasterBtn) {
+    footerCopyMasterBtn.addEventListener("click", () => {
+      const masterPrompt = generateMasterAiPrompt();
+      copyTextToClipboard(masterPrompt, "Copied Master AI Prompt to clipboard!");
+    });
+  }
+
+  if (footerExportPdfBtn) {
+    footerExportPdfBtn.addEventListener("click", () => {
+      window.print();
+    });
+  }
+
+  // Initial render of preset items
+  renderList();
+}
+
+// ==========================================================================
+// 9. Master Initialization
 // ==========================================================================
 
 function init() {
@@ -2021,20 +2322,21 @@ function init() {
   }
 
   populatePresetDropdown();
+  initSearchAndPresets();
   initCustomCursor();
   initScrollProgress();
   initStoryboardScroller();
 
   if (typeof presets !== "undefined") {
-    if (presets.meerubBeautySalon) {
-      presetPicker.value = "meerubBeautySalon";
-      applyPreset("meerubBeautySalon");
+    const savedPresetKey = sessionStorage.getItem("promptcraft_active_preset");
+    if (savedPresetKey && presets[savedPresetKey]) {
+      applyPreset(savedPresetKey, true);
+    } else if (presets.meerubBeautySalon) {
+      applyPreset("meerubBeautySalon", true);
     } else if (presets.bloomLuxuryLipstick) {
-      presetPicker.value = "bloomLuxuryLipstick";
-      applyPreset("bloomLuxuryLipstick");
+      applyPreset("bloomLuxuryLipstick", true);
     } else if (presets.realEstateLuxuryVilla) {
-      presetPicker.value = "realEstateLuxuryVilla";
-      applyPreset("realEstateLuxuryVilla");
+      applyPreset("realEstateLuxuryVilla", true);
     }
   } else {
     renderAllOutputs();

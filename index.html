@@ -52,34 +52,69 @@
       </div>
 
       <div class="header-actions">
-        <!-- 500 Presets Selector and Load Button -->
-        <div class="preset-control-wrapper">
-          <label for="presetPicker" class="preset-label">Choose preset</label>
-          <div class="preset-input-row">
-            <select id="presetPicker" class="select-preset" aria-label="Choose preset">
-              <option value="" disabled selected>✨ Choose preset (500 available)...</option>
-            </select>
-            <button id="loadPresetButton" type="button" class="btn btn-secondary" title="Load selected preset into form">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span>Load preset</span>
+        <!-- Integrated Search & Choose Preset Toolbar -->
+        <div class="search-preset-container" id="searchPresetContainer">
+          <div class="search-box-wrap">
+            <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="presetSearchInput" class="search-input" placeholder="Search presets (e.g. MEERUB, Luxury, Villa)..." aria-label="Search presets">
+            <button type="button" id="clearSearchBtn" class="clear-search-btn" title="Clear search" style="display:none;">✕</button>
+          </div>
+          
+          <div class="preset-dropdown-wrap">
+            <button type="button" class="btn-preset-toggle" id="choosePresetBtn" aria-haspopup="true" aria-expanded="false" title="Choose from 500 available presets">
+              <span class="preset-btn-label">CHOOSE PRESET</span>
+              <span class="preset-btn-current" id="currentPresetBadge">MEERUB</span>
+              <svg class="chevron-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
+            
+            <!-- Compact Preset Popover / Dropdown Menu -->
+            <div class="preset-popover-menu" id="presetPopoverMenu" role="menu">
+              <div class="popover-header">
+                <span class="popover-title">Choose Preset</span>
+                <span class="popover-count" id="presetCountBadge">500 Available</span>
+              </div>
+              
+              <div class="popover-quick-filters">
+                <button type="button" class="quick-filter-chip active" data-filter="all">All</button>
+                <button type="button" class="quick-filter-chip" data-filter="featured">Featured</button>
+                <button type="button" class="quick-filter-chip" data-filter="beauty">Beauty & Salon</button>
+                <button type="button" class="quick-filter-chip" data-filter="luxury">Luxury & Fashion</button>
+                <button type="button" class="quick-filter-chip" data-filter="tech">Tech & Auto</button>
+              </div>
+
+              <div class="preset-popover-list" id="presetPopoverList">
+                <!-- Dynamically rendered list of presets -->
+              </div>
+
+              <div class="popover-footer">
+                <button type="button" class="popover-action-btn" id="popoverCustomBtn">
+                  <span>✨ Custom Preset</span>
+                </button>
+                <button type="button" class="popover-action-btn reset" id="popoverResetBtn">
+                  <span>↺ Reset Default</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Top Generate Action Button -->
-        <button id="topGenerateBtn" type="button" class="btn btn-primary" title="Generate all 6 workflow steps">
+        <!-- Hidden legacy select for backward compatibility -->
+        <select id="presetPicker" style="display:none;" aria-hidden="true"></select>
+        <button id="loadPresetButton" type="button" style="display:none;" aria-hidden="true"></button>
+
+        <!-- Primary 3D Action Button -->
+        <button id="topGenerateBtn" type="button" class="btn btn-primary btn-3d" title="Generate all 6 workflow steps">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="5 3 19 12 5 21 5 3"></polygon>
           </svg>
           <span>Generate</span>
         </button>
 
-        <!-- Top Copy Master Prompt Button -->
-        <button id="topCopyMasterBtn" type="button" class="btn btn-secondary" title="Copy the Master AI Website Prompt">
+        <!-- Secondary 3D Copy Master Button -->
+        <button id="topCopyMasterBtn" type="button" class="btn btn-secondary btn-3d" title="Copy the Master AI Website Prompt">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -87,39 +122,9 @@
           <span>Copy Master</span>
         </button>
 
-        <!-- Export PDF Button -->
-        <button id="exportPdf" type="button" class="btn btn-secondary" title="Export full 6-step plan as PDF">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-            <polyline points="10 9 9 9 8 9"></polyline>
-          </svg>
-          <span>Export PDF</span>
-        </button>
-
-        <!-- Light / Dark Theme Toggle Button -->
-        <button id="themeToggleBtn" type="button" class="btn btn-icon" title="Toggle Light/Dark Theme" aria-label="Toggle theme">
-          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
-
-        <!-- Quick Export Dropdown -->
+        <!-- Export Menu Dropdown -->
         <div class="dropdown">
-          <button id="exportMenuBtn" type="button" class="btn btn-secondary" aria-haspopup="true" aria-expanded="false">
+          <button id="exportMenuBtn" type="button" class="btn btn-secondary btn-3d" aria-haspopup="true" aria-expanded="false" title="Export Plan">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
@@ -145,6 +150,24 @@
             </button>
           </div>
         </div>
+
+        <!-- Light / Dark Theme Toggle Button -->
+        <button id="themeToggleBtn" type="button" class="btn btn-icon btn-3d" title="Toggle Light/Dark Theme" aria-label="Toggle theme">
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -534,7 +557,7 @@
           </div>
 
           <div class="form-bottom-actions">
-            <button type="submit" class="btn btn-primary btn-lg" id="submitFormBtn">
+            <button type="submit" class="btn btn-primary btn-3d btn-lg" id="submitFormBtn">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
               <span>Regenerate All 6 Workflow Steps</span>
             </button>
@@ -573,11 +596,11 @@
           </div>
 
           <div class="output-quick-actions">
-            <button id="copyActiveTabBtn" type="button" class="btn btn-sm btn-secondary" title="Copy current tab view content">
+            <button id="copyActiveTabBtn" type="button" class="btn btn-sm btn-secondary btn-3d" title="Copy current tab view content">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
               <span>Copy</span>
             </button>
-            <button id="exportPdfTabBtn" type="button" class="btn btn-sm btn-secondary" title="Export full 6-step plan as printable PDF">
+            <button id="exportPdfTabBtn" type="button" class="btn btn-sm btn-secondary btn-3d" title="Export full 6-step plan as printable PDF">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
               <span>Export PDF</span>
             </button>
@@ -849,7 +872,7 @@
           <div class="doc-toolbar">
             <span class="doc-status">Formatted Markdown Document</span>
             <div class="doc-actions">
-              <button type="button" class="btn-sm btn-secondary copy-btn" data-copy-target="rawDocOutput">
+              <button type="button" class="btn btn-sm btn-secondary btn-3d copy-btn" data-copy-target="rawDocOutput">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 <span>Copy Full Plan</span>
               </button>
@@ -871,7 +894,7 @@
             </div>
             
             <div class="scrub-controls-bar">
-              <button type="button" class="btn btn-sm btn-primary" id="playStoryboardBtn" title="Play animated metamorphosis sequence">
+              <button type="button" class="btn btn-sm btn-primary btn-3d" id="playStoryboardBtn" title="Play animated metamorphosis sequence">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 <span id="playBtnLabel">Play Sequence</span>
               </button>
@@ -993,6 +1016,51 @@
     </section>
 
   </main>
+
+  <!-- Clean Luxury Footer & Action Area -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div class="footer-brand-col">
+        <div class="footer-logo-row">
+          <div class="brand-badge-sm">
+            <svg class="icon-sparkle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+          </div>
+          <span class="footer-brand-name">PromptCraft Studio</span>
+          <span class="footer-badge">500 Presets Engine</span>
+        </div>
+        <p class="footer-desc">Cinematic website architecture, AI prompt chaining, and FFmpeg video pipeline generator for luxury digital campaigns.</p>
+      </div>
+
+      <div class="footer-actions-col">
+        <div class="footer-cta-group">
+          <button type="button" class="btn btn-primary btn-3d" id="footerGenerateBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Generate Full Workflow</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-3d" id="footerCopyMasterBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span>Copy Master Prompt</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-3d" id="footerExportPdfBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>Export Plan (.PDF)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom-bar">
+      <span>PromptCraft Studio · Engineered for Google Flow & Antigravity Scrollytelling Sites</span>
+      <div class="footer-links">
+        <a href="#sectionImages">01 Images</a>
+        <a href="#sectionVideos">02 Videos</a>
+        <a href="#sectionMerge">03 FFmpeg</a>
+        <a href="#sectionBuildPrompt">05 Master Prompt</a>
+        <a href="#sectionDeployChecklist">06 Deploy</a>
+      </div>
+    </div>
+  </footer>
 
   <script src="presets.js"></script>
   <script src="app.js"></script>
