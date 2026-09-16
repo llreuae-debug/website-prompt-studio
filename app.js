@@ -1175,7 +1175,7 @@ jsonFileInput.addEventListener("change", (e) => {
 
 // Reset Form
 resetFormBtn.addEventListener("click", () => {
-  if (confirm("Reset form to default preset (Villa Solaria)?")) {
+  if (confirm("Reset form to default preset?")) {
     if (typeof presets !== "undefined" && presets.realEstateLuxuryVilla) {
       applyPreset("realEstateLuxuryVilla");
       presetPicker.value = "realEstateLuxuryVilla";
