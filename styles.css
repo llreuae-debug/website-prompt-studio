@@ -2129,6 +2129,8 @@ textarea {
   gap: 8px;
   padding: 10px 16px;
   background: #111827;
+}
+
 /* ==========================================================================
    Interactive Storyboard & 5-Stage Scrollytelling Simulator
    ========================================================================== */
@@ -2732,19 +2734,20 @@ textarea {
 }
 
 /* ==========================================================================
-/* ==========================================================================
    Clean Luxury Footer & Secondary Action System
    ========================================================================== */
 
 .app-footer {
   margin-top: 60px;
-  border-top: 1px solid rgba(245, 158, 11, 0.2);
-  background: linear-gradient(180deg, rgba(8, 12, 20, 0.95) 0%, rgba(4, 6, 12, 1) 100%);
+  border-top: 1px solid rgba(245, 158, 11, 0.25);
+  background: linear-gradient(180deg, rgba(11, 16, 26, 0.98) 0%, rgba(5, 8, 15, 1) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  padding: 48px 32px 32px;
+  padding: 40px 32px 28px;
   position: relative;
-  z-index: 10;
+  z-index: 100;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .footer-content {
@@ -2759,20 +2762,41 @@ textarea {
 
 .footer-brand-col {
   max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .footer-logo-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand-badge-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-xs);
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-gold);
+  flex-shrink: 0;
+}
+
+.brand-badge-sm svg {
+  display: block;
 }
 
 .footer-brand-name {
   font-family: var(--font-serif);
-  font-size: 20px;
+  font-size: 19px;
   letter-spacing: 0.04em;
   color: #ffffff;
+  font-weight: 600;
 }
 
 .footer-badge {
@@ -2789,9 +2813,9 @@ textarea {
 }
 
 .footer-desc {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--text-muted);
-  line-height: 1.55;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -2809,8 +2833,8 @@ textarea {
 
 .footer-bottom-bar {
   max-width: 1600px;
-  margin: 36px auto 0;
-  padding-top: 20px;
+  margin: 32px auto 0;
+  padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   justify-content: space-between;
@@ -2825,18 +2849,26 @@ textarea {
 .footer-links {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .footer-links a {
   color: var(--text-secondary);
   text-decoration: none;
-  transition: color 0.15s ease;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.15s ease;
 }
 
 .footer-links a:hover {
   color: var(--accent-gold-light);
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
 }
 
 /* ==========================================================================
