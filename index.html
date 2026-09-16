@@ -73,16 +73,33 @@
             <!-- Compact Preset Popover / Dropdown Menu -->
             <div class="preset-popover-menu" id="presetPopoverMenu" role="menu">
               <div class="popover-header">
-                <span class="popover-title">Choose Preset</span>
-                <span class="popover-count" id="presetCountBadge">500 Available</span>
+                <div class="popover-title-group">
+                  <span class="popover-title">Choose Preset Engine</span>
+                  <span class="popover-recommended-badge" id="recommendedPresetBadge" style="display:none;">✨ Recommended: Future Tech</span>
+                </div>
+                <span class="popover-count" id="presetCountBadge">25 3D Engines</span>
               </div>
               
-              <div class="popover-quick-filters">
+              <!-- Popover Engine Mode Switcher -->
+              <div class="popover-mode-tabs">
+                <button type="button" class="popover-mode-tab active" id="mode3dStoryBtn" data-mode="3d">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                  <span>25 3D Story Engines</span>
+                </button>
+                <button type="button" class="popover-mode-tab" id="modeBrandPresetsBtn" data-mode="brand">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  <span>500 Brand Presets</span>
+                </button>
+              </div>
+
+              <!-- Quick filter chips -->
+              <div class="popover-quick-filters" id="popoverQuickFilters">
                 <button type="button" class="quick-filter-chip active" data-filter="all">All</button>
-                <button type="button" class="quick-filter-chip" data-filter="featured">Featured</button>
-                <button type="button" class="quick-filter-chip" data-filter="beauty">Beauty & Salon</button>
-                <button type="button" class="quick-filter-chip" data-filter="luxury">Luxury & Fashion</button>
-                <button type="button" class="quick-filter-chip" data-filter="tech">Tech & Auto</button>
+                <button type="button" class="quick-filter-chip" data-filter="cinematic">Cinematic</button>
+                <button type="button" class="quick-filter-chip" data-filter="tech">Tech & Cyber</button>
+                <button type="button" class="quick-filter-chip" data-filter="fashion">Luxury & Fashion</button>
+                <button type="button" class="quick-filter-chip" data-filter="materials">Materials & 3D</button>
+                <button type="button" class="quick-filter-chip" data-filter="surreal">Surreal & Organic</button>
               </div>
 
               <div class="preset-popover-list" id="presetPopoverList">
@@ -91,7 +108,7 @@
 
               <div class="popover-footer">
                 <button type="button" class="popover-action-btn" id="popoverCustomBtn">
-                  <span>✨ Custom Preset</span>
+                  <span>✨ Custom Mode</span>
                 </button>
                 <button type="button" class="popover-action-btn reset" id="popoverResetBtn">
                   <span>↺ Reset Default</span>
@@ -886,14 +903,19 @@
           <div class="storyboard-header">
             <div>
               <div class="storyboard-badge-row">
-                <span class="badge-pill">AWWWARDS EDITORIAL SIMULATOR</span>
-                <span class="badge-pill gold">REAL-TIME CANVAS ENGINE</span>
+                <span class="badge-pill">25 DYNAMIC 3D STORYTELLING ENGINES</span>
+                <span class="badge-pill gold" id="active3dEngineBadge">01 CINEMATIC FILM</span>
+                <span class="badge-pill" id="activeCameraBadge" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border-color: rgba(6, 182, 212, 0.3);">SLOW 85MM PUSH-IN</span>
               </div>
-              <h3 class="storyboard-main-title">Interactive Scrollytelling & Visual Metamorphosis</h3>
-              <p class="section-intro">Experience the 5-stage transformation sequence driving the canvas scroll engine. Scrub the timeline or play the continuous sequence.</p>
+              <h3 class="storyboard-main-title" id="storyboardTitle">Interactive Scrollytelling & 3D Visual Metamorphosis</h3>
+              <p class="section-intro" id="storyboardDesc">Experience the 5-stage transformation sequence driving the 3D canvas scroll engine. Change 3D creative direction in real-time or scrub the sequence.</p>
             </div>
             
             <div class="scrub-controls-bar">
+              <div class="storyboard-engine-picker-wrap">
+                <label for="storyboardEngineSelect" class="scrub-label">3D Engine:</label>
+                <select id="storyboardEngineSelect" class="storyboard-engine-select" aria-label="Choose 3D Storytelling Preset"></select>
+              </div>
               <button type="button" class="btn btn-sm btn-primary btn-3d" id="playStoryboardBtn" title="Play animated metamorphosis sequence">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                 <span id="playBtnLabel">Play Sequence</span>
@@ -1062,6 +1084,7 @@
     </div>
   </footer>
 
+  <script src="story3dPresets.js"></script>
   <script src="presets.js"></script>
   <script src="app.js"></script>
 </body>

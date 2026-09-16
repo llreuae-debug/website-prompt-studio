@@ -2041,8 +2041,93 @@ function initScrollProgress() {
 }
 
 // ==========================================================================
-// 8. Search & Preset Popover Engine
+// 8. 25 Dynamic 3D Storytelling Preset Engine & Search Popover
 // ==========================================================================
+
+let currentActive3DPresetKey = sessionStorage.getItem("promptcraft_active_3d_preset") || "01_cinematic_film";
+let current3DRecommendation = null;
+
+function apply3DStoryPreset(key, silent = false) {
+  if (typeof story3dPresets === "undefined") return;
+  const preset = story3dPresets[key] || story3dPresets["25_signature_hybrid"];
+  if (!preset) return;
+
+  currentActive3DPresetKey = key;
+  sessionStorage.setItem("promptcraft_active_3d_preset", key);
+
+  // Update UI Badges in Tab 3 Storyboard
+  const active3dEngineBadge = document.getElementById("active3dEngineBadge");
+  const activeCameraBadge = document.getElementById("activeCameraBadge");
+  const storyboardTitle = document.getElementById("storyboardTitle");
+  const storyboardDesc = document.getElementById("storyboardDesc");
+  const storyboardEngineSelect = document.getElementById("storyboardEngineSelect");
+  const liveMockupBody = document.getElementById("liveMockupBody");
+
+  if (active3dEngineBadge) {
+    active3dEngineBadge.textContent = `${preset.number} ${preset.name}`;
+  }
+
+  if (activeCameraBadge) {
+    const camShort = preset.camera.split(" on ")[0].split(" with ")[0].toUpperCase();
+    activeCameraBadge.textContent = camShort;
+  }
+
+  if (storyboardTitle) {
+    storyboardTitle.textContent = `${preset.name} — Interactive 3D Storyboard`;
+  }
+
+  if (storyboardDesc) {
+    storyboardDesc.textContent = `${preset.description} (Camera: ${preset.camera} · Transition: ${preset.transition})`;
+  }
+
+  if (storyboardEngineSelect && storyboardEngineSelect.value !== key) {
+    storyboardEngineSelect.value = key;
+  }
+
+  // Update Visual Theme Classes on Simulated Website Window
+  if (liveMockupBody) {
+    // Remove previous theme-* classes
+    liveMockupBody.className.split(" ").forEach(cls => {
+      if (cls.startsWith("theme-")) {
+        liveMockupBody.classList.remove(cls);
+      }
+    });
+    if (preset.cssThemeClass) {
+      liveMockupBody.classList.add(preset.cssThemeClass);
+    }
+  }
+
+  // Sync active class in popover list
+  document.querySelectorAll(".preset-item-3d").forEach(item => {
+    if (item.getAttribute("data-3d-key") === key) {
+      item.classList.add("active");
+    } else {
+      item.classList.remove("active");
+    }
+  });
+
+  if (!silent) {
+    showToast(`Activated 3D Engine: "${preset.number} — ${preset.name}"!`, "success");
+  }
+}
+
+function analyzeTopicAndRecommend() {
+  if (typeof recommendStory3DPreset === "undefined") return;
+  const brand = form?.elements?.brand?.value || "";
+  const product = form?.elements?.product?.value || "";
+  const purpose = form?.elements?.purpose?.value || "";
+  const feeling = form?.elements?.feeling?.value || "";
+
+  const topicCorpus = `${brand} ${product} ${purpose} ${feeling}`;
+  current3DRecommendation = recommendStory3DPreset(topicCorpus);
+
+  const recommendedBadge = document.getElementById("recommendedPresetBadge");
+  if (recommendedBadge && current3DRecommendation) {
+    recommendedBadge.textContent = `✨ Recommended: ${current3DRecommendation.name}`;
+    recommendedBadge.style.display = "inline-block";
+    recommendedBadge.title = `Click to activate ${current3DRecommendation.name}`;
+  }
+}
 
 function initSearchAndPresets() {
   const searchInput = document.getElementById("presetSearchInput");
@@ -2051,18 +2136,43 @@ function initSearchAndPresets() {
   const presetPopoverMenu = document.getElementById("presetPopoverMenu");
   const presetPopoverList = document.getElementById("presetPopoverList");
   const presetCountBadge = document.getElementById("presetCountBadge");
-  const filterChips = document.querySelectorAll(".quick-filter-chip");
+  const popoverQuickFilters = document.getElementById("popoverQuickFilters");
+  const mode3dStoryBtn = document.getElementById("mode3dStoryBtn");
+  const modeBrandPresetsBtn = document.getElementById("modeBrandPresetsBtn");
   const popoverCustomBtn = document.getElementById("popoverCustomBtn");
   const popoverResetBtn = document.getElementById("popoverResetBtn");
+  const recommendedBadge = document.getElementById("recommendedPresetBadge");
+  const storyboardEngineSelect = document.getElementById("storyboardEngineSelect");
 
-  if (!presetPopoverList || typeof presets === "undefined") return;
+  if (!presetPopoverList) return;
 
-  let activeCategory = "all";
+  let currentMode = "3d"; // "3d" or "brand"
+  let active3DCategory = "all";
+  let activeBrandCategory = "all";
   let activeSearchQuery = "";
   let highlightedIndex = -1;
 
-  // Categorization classifier
-  function getPresetCategory(key, p) {
+  // Populate Tab 3 Storyboard Engine Select Dropdown
+  if (storyboardEngineSelect && typeof story3dPresets !== "undefined") {
+    storyboardEngineSelect.innerHTML = Object.values(story3dPresets)
+      .map(p => `<option value="${p.id}">${p.number} — ${p.name}</option>`)
+      .join("");
+
+    storyboardEngineSelect.addEventListener("change", (e) => {
+      apply3DStoryPreset(e.target.value);
+    });
+  }
+
+  // Pre-index 25 3D Storytelling Presets
+  const storyPresetEntries = typeof story3dPresets !== "undefined"
+    ? Object.values(story3dPresets).map(p => ({
+        ...p,
+        searchCorpus: `${p.number} ${p.name} ${p.tagline} ${p.description} ${p.category} ${p.topicCompatibility.join(" ")}`.toLowerCase()
+      }))
+    : [];
+
+  // Pre-index 500 Brand Presets
+  function getBrandCategory(key, p) {
     const text = `${key} ${p.label || ""} ${p.brand || ""} ${p.product || ""} ${p.feeling || ""}`.toLowerCase();
     if (text.includes("beauty") || text.includes("salon") || text.includes("lipstick") || text.includes("cosmetic") || text.includes("perfume") || text.includes("fragrance") || text.includes("skincare") || text.includes("glow") || text.includes("serum") || text.includes("couture") || text.includes("velvet") || text.includes("spa")) {
       return "beauty";
@@ -2073,72 +2183,159 @@ function initSearchAndPresets() {
     return "luxury";
   }
 
-  // Pre-index all 500 presets
-  const presetEntries = Object.entries(presets).map(([key, p]) => {
-    const cat = getPresetCategory(key, p);
-    const isFeatured = key === "meerubBeautySalon" || key === "bloomLuxuryLipstick" || key === "realEstateLuxuryVilla" || key.toLowerCase().includes("luxury") || key.toLowerCase().includes("supercar");
-    return {
-      key,
-      preset: p,
-      label: p.label || key,
-      brand: p.brand || "",
-      product: p.product || "",
-      category: cat,
-      isFeatured,
-      searchCorpus: `${p.label} ${p.brand} ${p.product} ${p.feeling || ""} ${cat}`.toLowerCase()
-    };
-  }).sort((a, b) => a.label.localeCompare(b.label));
+  const brandPresetEntries = typeof presets !== "undefined"
+    ? Object.entries(presets).map(([key, p]) => {
+        const cat = getBrandCategory(key, p);
+        const isFeatured = key === "meerubBeautySalon" || key === "bloomLuxuryLipstick" || key === "realEstateLuxuryVilla" || key.toLowerCase().includes("luxury") || key.toLowerCase().includes("supercar");
+        return {
+          key,
+          preset: p,
+          label: p.label || key,
+          brand: p.brand || "",
+          product: p.product || "",
+          category: cat,
+          isFeatured,
+          searchCorpus: `${p.label} ${p.brand} ${p.product} ${p.feeling || ""} ${cat}`.toLowerCase()
+        };
+      }).sort((a, b) => a.label.localeCompare(b.label))
+    : [];
+
+  function updateQuickFilterChips() {
+    if (!popoverQuickFilters) return;
+
+    if (currentMode === "3d") {
+      popoverQuickFilters.innerHTML = `
+        <button type="button" class="quick-filter-chip ${active3DCategory === 'all' ? 'active' : ''}" data-filter="all">All (25)</button>
+        <button type="button" class="quick-filter-chip ${active3DCategory === 'cinematic' ? 'active' : ''}" data-filter="cinematic">Cinematic</button>
+        <button type="button" class="quick-filter-chip ${active3DCategory === 'tech' ? 'active' : ''}" data-filter="tech">Tech & Cyber</button>
+        <button type="button" class="quick-filter-chip ${active3DCategory === 'fashion' ? 'active' : ''}" data-filter="fashion">Fashion & Art</button>
+        <button type="button" class="quick-filter-chip ${active3DCategory === 'materials' ? 'active' : ''}" data-filter="materials">Materials & 3D</button>
+        <button type="button" class="quick-filter-chip ${active3DCategory === 'surreal' ? 'active' : ''}" data-filter="surreal">Organic & Surreal</button>
+      `;
+    } else {
+      popoverQuickFilters.innerHTML = `
+        <button type="button" class="quick-filter-chip ${activeBrandCategory === 'all' ? 'active' : ''}" data-filter="all">All (500)</button>
+        <button type="button" class="quick-filter-chip ${activeBrandCategory === 'featured' ? 'active' : ''}" data-filter="featured">Featured</button>
+        <button type="button" class="quick-filter-chip ${activeBrandCategory === 'beauty' ? 'active' : ''}" data-filter="beauty">Beauty & Salon</button>
+        <button type="button" class="quick-filter-chip ${activeBrandCategory === 'luxury' ? 'active' : ''}" data-filter="luxury">Luxury & Fashion</button>
+        <button type="button" class="quick-filter-chip ${activeBrandCategory === 'tech' ? 'active' : ''}" data-filter="tech">Tech & Auto</button>
+      `;
+    }
+
+    // Reattach quick filter click listeners
+    popoverQuickFilters.querySelectorAll(".quick-filter-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        popoverQuickFilters.querySelectorAll(".quick-filter-chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        if (currentMode === "3d") {
+          active3DCategory = chip.getAttribute("data-filter") || "all";
+        } else {
+          activeBrandCategory = chip.getAttribute("data-filter") || "all";
+        }
+        renderList();
+      });
+    });
+  }
 
   function renderList() {
     const query = activeSearchQuery.trim().toLowerCase();
-    const filtered = presetEntries.filter(item => {
-      // Category filter
-      if (activeCategory === "featured" && !item.isFeatured) return false;
-      if (activeCategory === "beauty" && item.category !== "beauty") return false;
-      if (activeCategory === "luxury" && item.category !== "luxury") return false;
-      if (activeCategory === "tech" && item.category !== "tech") return false;
-      
-      // Search query filter
-      if (query && !item.searchCorpus.includes(query)) return false;
-      return true;
-    });
 
-    if (presetCountBadge) {
-      presetCountBadge.textContent = `${filtered.length} Available`;
-    }
-
-    if (filtered.length === 0) {
-      presetPopoverList.innerHTML = `
-        <div style="padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 12px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 8px; display: block; opacity: 0.5;">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          No matching presets found for "<strong>${escapeHtml(activeSearchQuery)}</strong>"
-        </div>
-      `;
-      return;
-    }
-
-    presetPopoverList.innerHTML = filtered.slice(0, 120).map((item, idx) => {
-      const isActive = item.key === currentActivePresetKey;
-      const catBadge = item.category === "beauty" ? "BEAUTY" : item.category === "tech" ? "TECH" : "LUXURY";
-      return `
-        <button type="button" class="preset-item ${isActive ? 'active' : ''}" data-preset-key="${item.key}" data-index="${idx}" role="menuitem">
-          <span class="preset-item-label">${escapeHtml(item.label)}</span>
-          <span class="preset-item-category">${catBadge}</span>
-        </button>
-      `;
-    }).join("");
-
-    // Attach click listeners to preset items
-    presetPopoverList.querySelectorAll(".preset-item").forEach(itemBtn => {
-      itemBtn.addEventListener("click", () => {
-        const key = itemBtn.getAttribute("data-preset-key");
-        applyPreset(key);
-        closePopover();
+    if (currentMode === "3d") {
+      // Render 25 3D Story Engines
+      const filtered = storyPresetEntries.filter(item => {
+        if (active3DCategory === "cinematic" && !["cinematic", "macro", "parallax"].includes(item.category)) return false;
+        if (active3DCategory === "tech" && !["tech", "cyber", "technical", "data"].includes(item.category)) return false;
+        if (active3DCategory === "fashion" && !["fashion", "editorial", "art", "sculpture", "typography"].includes(item.category)) return false;
+        if (active3DCategory === "materials" && !["materials", "minimal", "product"].includes(item.category)) return false;
+        if (active3DCategory === "surreal" && !["nature", "fluid", "particle", "surreal", "energy", "environment", "hybrid"].includes(item.category)) return false;
+        
+        if (query && !item.searchCorpus.includes(query)) return false;
+        return true;
       });
-    });
+
+      if (presetCountBadge) {
+        presetCountBadge.textContent = `${filtered.length} 3D Engines`;
+      }
+
+      if (filtered.length === 0) {
+        presetPopoverList.innerHTML = `
+          <div style="padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 12px;">
+            No matching 3D Story Engines found for "<strong>${escapeHtml(activeSearchQuery)}</strong>"
+          </div>
+        `;
+        return;
+      }
+
+      presetPopoverList.innerHTML = filtered.map((item, idx) => {
+        const isActive = item.id === currentActive3DPresetKey;
+        const isRec = current3DRecommendation && item.id === current3DRecommendation.id;
+        return `
+          <button type="button" class="preset-item preset-item-3d ${isActive ? 'active' : ''} ${isRec ? 'recommended' : ''}" data-3d-key="${item.id}" data-index="${idx}" role="menuitem" title="${escapeHtml(item.description)}">
+            <div class="preset-item-main">
+              <div>
+                <span class="preset-item-num">${item.number}</span>
+                <strong style="color:#ffffff;">${escapeHtml(item.name)}</strong>
+                ${isRec ? '<span style="color:var(--accent-cyan); font-size:9.5px; margin-left:6px; font-weight:700;">★ MATCH</span>' : ''}
+              </div>
+              <span class="preset-item-tagline">${escapeHtml(item.tagline)}</span>
+            </div>
+            <span class="preset-item-category">${escapeHtml(item.category)}</span>
+          </button>
+        `;
+      }).join("");
+
+      presetPopoverList.querySelectorAll(".preset-item-3d").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const key = btn.getAttribute("data-3d-key");
+          apply3DStoryPreset(key);
+          closePopover();
+        });
+      });
+
+    } else {
+      // Render 500 Brand Presets
+      const filtered = brandPresetEntries.filter(item => {
+        if (activeBrandCategory === "featured" && !item.isFeatured) return false;
+        if (activeBrandCategory === "beauty" && item.category !== "beauty") return false;
+        if (activeBrandCategory === "luxury" && item.category !== "luxury") return false;
+        if (activeBrandCategory === "tech" && item.category !== "tech") return false;
+        
+        if (query && !item.searchCorpus.includes(query)) return false;
+        return true;
+      });
+
+      if (presetCountBadge) {
+        presetCountBadge.textContent = `${filtered.length} Presets`;
+      }
+
+      if (filtered.length === 0) {
+        presetPopoverList.innerHTML = `
+          <div style="padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 12px;">
+            No matching brand presets found for "<strong>${escapeHtml(activeSearchQuery)}</strong>"
+          </div>
+        `;
+        return;
+      }
+
+      presetPopoverList.innerHTML = filtered.slice(0, 120).map((item, idx) => {
+        const isActive = item.key === currentActivePresetKey;
+        const catBadge = item.category === "beauty" ? "BEAUTY" : item.category === "tech" ? "TECH" : "LUXURY";
+        return `
+          <button type="button" class="preset-item ${isActive ? 'active' : ''}" data-preset-key="${item.key}" data-index="${idx}" role="menuitem">
+            <span class="preset-item-label">${escapeHtml(item.label)}</span>
+            <span class="preset-item-category">${catBadge}</span>
+          </button>
+        `;
+      }).join("");
+
+      presetPopoverList.querySelectorAll(".preset-item").forEach(itemBtn => {
+        itemBtn.addEventListener("click", () => {
+          const key = itemBtn.getAttribute("data-preset-key");
+          applyPreset(key);
+          closePopover();
+        });
+      });
+    }
 
     highlightedIndex = -1;
   }
@@ -2165,6 +2362,37 @@ function initSearchAndPresets() {
     }
   }
 
+  // Popover Mode Switcher Buttons
+  if (mode3dStoryBtn) {
+    mode3dStoryBtn.addEventListener("click", () => {
+      currentMode = "3d";
+      mode3dStoryBtn.classList.add("active");
+      modeBrandPresetsBtn.classList.remove("active");
+      updateQuickFilterChips();
+      renderList();
+    });
+  }
+
+  if (modeBrandPresetsBtn) {
+    modeBrandPresetsBtn.addEventListener("click", () => {
+      currentMode = "brand";
+      modeBrandPresetsBtn.classList.add("active");
+      mode3dStoryBtn.classList.remove("active");
+      updateQuickFilterChips();
+      renderList();
+    });
+  }
+
+  // Recommended Badge Click
+  if (recommendedBadge) {
+    recommendedBadge.addEventListener("click", () => {
+      if (current3DRecommendation) {
+        apply3DStoryPreset(current3DRecommendation.id);
+        closePopover();
+      }
+    });
+  }
+
   // Toggle button click
   if (choosePresetBtn) {
     choosePresetBtn.addEventListener("click", (e) => {
@@ -2189,7 +2417,7 @@ function initSearchAndPresets() {
     });
 
     searchInput.addEventListener("keydown", (e) => {
-      const items = presetPopoverList.querySelectorAll(".preset-item");
+      const items = presetPopoverList.querySelectorAll(".preset-item, .preset-item-3d");
       if (!items.length) return;
 
       if (e.key === "ArrowDown") {
@@ -2233,16 +2461,6 @@ function initSearchAndPresets() {
     });
   }
 
-  // Quick filter chips
-  filterChips.forEach(chip => {
-    chip.addEventListener("click", () => {
-      filterChips.forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-      activeCategory = chip.getAttribute("data-filter") || "all";
-      renderList();
-    });
-  });
-
   // Custom Preset button
   if (popoverCustomBtn) {
     popoverCustomBtn.addEventListener("click", () => {
@@ -2258,6 +2476,7 @@ function initSearchAndPresets() {
   if (popoverResetBtn) {
     popoverResetBtn.addEventListener("click", () => {
       applyPreset("meerubBeautySalon");
+      apply3DStoryPreset("01_cinematic_film");
       closePopover();
     });
   }
@@ -2307,8 +2526,17 @@ function initSearchAndPresets() {
     });
   }
 
-  // Initial render of preset items
+  // Reactive topic analysis on form inputs
+  ["brand", "product", "purpose", "feeling"].forEach(f => {
+    const el = form?.elements[f];
+    if (el) {
+      el.addEventListener("input", analyzeTopicAndRecommend);
+    }
+  });
+
+  updateQuickFilterChips();
   renderList();
+  analyzeTopicAndRecommend();
 }
 
 // ==========================================================================
@@ -2340,6 +2568,12 @@ function init() {
     }
   } else {
     renderAllOutputs();
+  }
+
+  // Initialize 3D Story Engine
+  if (typeof story3dPresets !== "undefined") {
+    const saved3DKey = sessionStorage.getItem("promptcraft_active_3d_preset") || "01_cinematic_film";
+    apply3DStoryPreset(saved3DKey, true);
   }
 }
 

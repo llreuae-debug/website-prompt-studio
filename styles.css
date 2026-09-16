@@ -859,12 +859,30 @@ body {
   padding: 10px 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.25);
+  gap: 8px;
+}
+
+.popover-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .popover-title {
   font-family: var(--font-serif);
-  font-size: 16px;
+  font-size: 15px;
   color: #ffffff;
+}
+
+.popover-recommended-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
 .popover-count {
@@ -874,6 +892,43 @@ body {
   background: rgba(245, 158, 11, 0.12);
   padding: 2px 7px;
   border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+/* Popover Engine Mode Switcher Tabs */
+.popover-mode-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.popover-mode-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.popover-mode-tab:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.popover-mode-tab.active {
+  color: var(--accent-gold-light);
+  border-bottom-color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.08);
 }
 
 .popover-quick-filters {
@@ -952,12 +1007,41 @@ body {
   font-weight: 600;
 }
 
+.preset-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.preset-item-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-right: 6px;
+}
+
+.preset-item-tagline {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .preset-item-category {
   font-family: var(--font-mono);
   font-size: 9.5px;
   color: var(--text-muted);
   text-transform: uppercase;
   margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.preset-item.recommended {
+  border-left: 2px solid var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.08);
 }
 
 .popover-footer {
@@ -967,6 +1051,157 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.35);
   gap: 8px;
+}
+
+/* 3D Storyboard Engine Picker in Tab 3 */
+.storyboard-engine-picker-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.storyboard-engine-select {
+  height: 32px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--accent-gold-light);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-xs);
+  padding: 0 8px;
+  outline: none;
+  cursor: pointer;
+}
+
+.storyboard-engine-select:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+}
+
+/* ==========================================================================
+   25 Dynamic 3D Storytelling Preset Visual Themes (Live Simulator)
+   ========================================================================== */
+
+/* 01 Cinematic Film */
+.live-mockup-body.theme-cinematic-film {
+  background: radial-gradient(ellipse at center, #1a0f14 0%, #080406 80%);
+}
+.live-mockup-body.theme-cinematic-film .mockup-brand {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.18em;
+  color: #c9a675;
+}
+
+/* 02 Luxury Fashion */
+.live-mockup-body.theme-luxury-fashion {
+  background: radial-gradient(circle at 60% 40%, #171717 0%, #050505 100%);
+}
+.live-mockup-body.theme-luxury-fashion .mockup-brand {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.25em;
+  color: #ffffff;
+}
+
+/* 03 Future Tech */
+.live-mockup-body.theme-future-tech {
+  background: radial-gradient(circle at 50% 30%, #0a192f 0%, #020817 90%);
+}
+.live-mockup-body.theme-future-tech .mockup-brand {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.15em;
+  color: #38bdf8;
+  text-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+}
+
+/* 04 Architectural */
+.live-mockup-body.theme-architectural {
+  background: linear-gradient(180deg, #18181b 0%, #09090b 100%);
+}
+.live-mockup-body.theme-architectural .mockup-brand {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.14em;
+  color: #d4d4d8;
+}
+
+/* 05 Product Cinema */
+.live-mockup-body.theme-product-cinema {
+  background: radial-gradient(circle at 50% 50%, #1c1917 0%, #0c0a09 100%);
+}
+.live-mockup-body.theme-product-cinema .mockup-brand {
+  font-family: 'Playfair Display', serif;
+  color: #fbbf24;
+}
+
+/* 06 Organic Nature */
+.live-mockup-body.theme-organic-nature {
+  background: radial-gradient(circle at 50% 40%, #064e3b 0%, #022c22 70%, #011510 100%);
+}
+.live-mockup-body.theme-organic-nature .mockup-brand {
+  font-family: 'Playfair Display', serif;
+  color: #34d399;
+}
+
+/* 07 Minimal 3D */
+.live-mockup-body.theme-minimal-3d {
+  background: #09090b;
+}
+.live-mockup-body.theme-minimal-3d .mockup-brand {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  color: #fafafa;
+}
+
+/* 08 Glass World */
+.live-mockup-body.theme-glass-world {
+  background: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%);
+}
+.live-mockup-body.theme-glass-world .mockup-brand {
+  font-family: 'Cinzel', serif;
+  color: #93c5fd;
+  text-shadow: 0 0 16px rgba(147, 197, 253, 0.4);
+}
+
+/* 09 Chrome Future */
+.live-mockup-body.theme-chrome-future {
+  background: radial-gradient(circle at 40% 40%, #1e293b 0%, #0f172a 60%, #020617 100%);
+}
+.live-mockup-body.theme-chrome-future .mockup-brand {
+  font-family: 'JetBrains Mono', monospace;
+  color: #e2e8f0;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
+/* 16 Neon Night */
+.live-mockup-body.theme-neon-night {
+  background: radial-gradient(circle at 50% 50%, #1e1028 0%, #09030d 100%);
+}
+.live-mockup-body.theme-neon-night .mockup-brand {
+  font-family: 'JetBrains Mono', monospace;
+  color: #f43f5e;
+  text-shadow: 0 0 18px rgba(244, 63, 94, 0.7), 0 0 30px rgba(6, 182, 212, 0.4);
+}
+
+/* 19 Blueprint */
+.live-mockup-body.theme-blueprint {
+  background: #031738;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.live-mockup-body.theme-blueprint .mockup-brand {
+  font-family: 'JetBrains Mono', monospace;
+  color: #60a5fa;
+  letter-spacing: 0.2em;
+}
+
+/* 24 Data Dimension */
+.live-mockup-body.theme-data-dimension {
+  background: radial-gradient(circle at 50% 30%, #064e3b 0%, #022c22 40%, #020617 100%);
+}
+.live-mockup-body.theme-data-dimension .mockup-brand {
+  font-family: 'JetBrains Mono', monospace;
+  color: #10b981;
+  text-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
 }
 
 .popover-action-btn {
