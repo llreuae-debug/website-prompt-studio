@@ -12,13 +12,16 @@ const presetPicker = document.getElementById("presetPicker");
 const loadPresetButton = document.getElementById("loadPresetButton");
 const topGenerateBtn = document.getElementById("topGenerateBtn");
 const topCopyMasterBtn = document.getElementById("topCopyMasterBtn");
+const exportPdf = document.getElementById("exportPdf");
 const copyActiveTabBtn = document.getElementById("copyActiveTabBtn");
+const exportPdfTabBtn = document.getElementById("exportPdfTabBtn");
 const themeToggleBtn = document.getElementById("themeToggleBtn");
 const toastContainer = document.getElementById("toastContainer");
 
 // Dropdowns
 const exportMenuBtn = document.getElementById("exportMenuBtn");
 const exportDropdownMenu = document.getElementById("exportDropdownMenu");
+const downloadPdfBtn = document.getElementById("downloadPdfBtn");
 const downloadMdBtn = document.getElementById("downloadMdBtn");
 const downloadTxtBtn = document.getElementById("downloadTxtBtn");
 const downloadShBtn = document.getElementById("downloadShBtn");
@@ -136,6 +139,16 @@ function setFormData(data) {
   updatePersonFieldVisibility();
   updateColorChips();
   renderAllOutputs();
+}
+
+function escapeHtml(value) {
+  if (value === null || value === undefined) return "";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function slugify(val, fallback = "item") {
@@ -978,6 +991,129 @@ copyActiveTabBtn.addEventListener("click", () => {
     copyTextToClipboard(items, "Checklist copied!");
   }
 });
+
+// Export PDF Implementation
+function handleExportPdf() {
+  const d = getFormData();
+  
+  // If the output is empty, generate the six-step plan first
+  if (!masterPromptDisplay || !masterPromptDisplay.textContent || masterPromptDisplay.textContent.includes("Click Generate")) {
+    generate();
+  }
+
+  const brand = fallback(d.brand, "Website Plan");
+  const fullPlanText = generateFullUnifiedDocument(d);
+
+  // Open clean printable page in new window
+  const printWindow = window.open("", "_blank");
+  if (!printWindow || printWindow.closed || typeof printWindow.closed === "undefined") {
+    showToast("Popup blocked! Please allow popups for this site and try Export PDF again.", "info");
+    return;
+  }
+
+  const printableHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(brand)} — 6-Step Website Specification</title>
+  <style>
+    @page {
+      size: letter portrait;
+      margin: 18mm 15mm 18mm 15mm;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #ffffff !important;
+      color: #111827 !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      padding: 24px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .pdf-header {
+      border-bottom: 2px solid #111827;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+    .pdf-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #000000;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .pdf-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #4b5563;
+      font-weight: 500;
+    }
+    .pdf-note {
+      font-style: italic;
+      color: #374151;
+    }
+    .pdf-date {
+      color: #6b7280;
+    }
+    .pdf-content {
+      font-family: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "JetBrains Mono", "Courier New", monospace;
+      font-size: 11px;
+      line-height: 1.55;
+      color: #000000;
+      white-space: pre-wrap;
+      word-break: break-word;
+      tab-size: 2;
+    }
+    @media print {
+      body {
+        padding: 0;
+      }
+      .pdf-header {
+        margin-bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pdf-header">
+    <h1 class="pdf-title">${escapeHtml(brand)}</h1>
+    <div class="pdf-meta">
+      <span class="pdf-note">Generated from the website prompt form.</span>
+      <span class="pdf-date">${new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+    </div>
+  </div>
+  <pre class="pdf-content">${escapeHtml(fullPlanText)}</pre>
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        window.focus();
+        window.print();
+      }, 300);
+    });
+  <\/script>
+</body>
+</html>`;
+
+  printWindow.document.open();
+  printWindow.document.write(printableHtml);
+  printWindow.document.close();
+
+  showToast("Opening print dialog for PDF export...", "success");
+}
+
+// Export PDF Button Listeners
+exportPdf?.addEventListener("click", handleExportPdf);
+downloadPdfBtn?.addEventListener("click", handleExportPdf);
+exportPdfTabBtn?.addEventListener("click", handleExportPdf);
 
 // Export Dropdown
 exportMenuBtn.addEventListener("click", (e) => {
