@@ -166,6 +166,11 @@
         <span class="step-num">06</span>
         <span class="step-name">Deploy Checklist</span>
       </div>
+      <div class="workflow-divider"></div>
+      <div class="workflow-step" data-step="7" role="button" tabindex="0">
+        <span class="step-num">07</span>
+        <span class="step-name">Site Expansion</span>
+      </div>
     </div>
   </header>
 
@@ -212,30 +217,46 @@
               <div class="input-grid">
                 <div class="form-field">
                   <label for="brand">Brand / Project Name <span class="required">*</span></label>
-                  <input type="text" id="brand" name="brand" placeholder="e.g. BLOOM, CHRONOS, AURA" required value="VILLA SOLARIA">
+                  <input type="text" id="brand" name="brand" placeholder="e.g. MEERUB, BLOOM, AURA" required value="MEERUB">
                 </div>
                 <div class="form-field">
                   <label for="product">Product or Hero Subject <span class="required">*</span></label>
-                  <input type="text" id="product" name="product" placeholder="e.g. Luxury red lipstick" required value="Cliffside Mediterranean luxury villa in Amalfi">
+                  <input type="text" id="product" name="product" placeholder="e.g. Luxury beauty salon, lipstick" required value="Luxury Beauty Salon & Cosmetic Artistry">
                 </div>
                 <div class="form-field full-width">
                   <label for="purpose">Promotion Goal & Hook</label>
-                  <textarea id="purpose" name="purpose" rows="2" placeholder="e.g. A cinematic product launch site highlighting organic rose pigment extraction into a couture chrome bullet.">An exclusive architectural showcase presenting an ultra-prime cliffside estate with infinity pools and private helipad.</textarea>
+                  <textarea id="purpose" name="purpose" rows="2" placeholder="e.g. A 100% free, six-step build: a cinematic beauty salon experience becomes a luxury scroll website.">A 100% free, six-step build: a cinematic beauty salon experience becomes a luxury scroll website.</textarea>
                 </div>
-                <div class="form-field">
-                  <label for="feeling">Visual Atmosphere / Feeling</label>
-                  <select id="feeling" name="feeling">
-                    <option value="cinematic luxury" selected>💎 Cinematic Luxury & Editorial</option>
-                    <option value="clean modern">✨ Clean Modern & Minimalist</option>
-                    <option value="soft skincare">🌿 Organic Wellness & Soft Botanical</option>
-                    <option value="bold fashion">🔥 Bold Avant-Garde High-Fashion</option>
-                    <option value="futuristic">⚡ Futuristic Cyber & Sci-Fi</option>
-                    <option value="playful">🎨 Vibrant, Pop & Dynamic</option>
+                <div class="form-field full-width">
+                  <label for="visual-atmosphere-selector">Atmosphere & Mood Profile</label>
+                  <select id="visual-atmosphere-selector" name="feeling">
+                    <option value="cinematic luxury" selected>00. Default — Cinematic Luxury & Editorial</option>
+                    <option value="liminal">01. Liminal Melancholy & Desolation</option>
+                    <option value="industrial">02. Dystopian Industrial Decay</option>
+                    <option value="sublime">03. Sublime Ethereal Transcendence</option>
+                    <option value="nordic">04. Foreboding Nordic Noir</option>
+                    <option value="americana">05. Nostalgic Sun-Drenched Americana</option>
+                    <option value="neorainy">06. Neo-Noir Rainy Cybernetic Isolation</option>
+                    <option value="primordial">07. Primal Primordial Dread</option>
+                    <option value="sterile">08. Sterile High-Tech Apathy</option>
+                    <option value="cosmic">09. Cosmic Eldritch Vastness</option>
+                    <option value="hearthside">10. Warm Hearthside Intimacy</option>
+                    <option value="surrealist">11. Surrealist Fever-Dream Haze</option>
+                    <option value="victorian">12. Gothic Victorian Gloom</option>
+                    <option value="solarpunk">13. Vibrant Solarpunk Optimism</option>
+                    <option value="panic">14. High-Octane Claustrophobic Panic</option>
+                    <option value="lofi">15. Hazy Late-Night Lo-Fi Chill</option>
+                    <option value="desert">16. Sun-Bleached Desert Solitude</option>
+                    <option value="pastoral">17. Haunted Pastoral Serenity</option>
+                    <option value="opulence">18. Gilded Opulence & Decadence</option>
+                    <option value="abyssal">19. Murky Abyssal Depths</option>
+                    <option value="postwar">20. Post-War Silent Ruin</option>
                   </select>
+                  <div id="visualAtmosphereDesc" class="input-hint" style="font-size: 11.5px; color: var(--accent-gold); margin-top: 4px; font-style: italic;">Quiet luxury, couture beauty editorial styling, and rich burgundy gradients.</div>
                 </div>
                 <div class="form-field">
                   <label for="audience">Target Audience</label>
-                  <input type="text" id="audience" name="audience" placeholder="e.g. Luxury beauty connoisseurs, collectors" value="Ultra-high-net-worth investors, luxury homeowners, international buyers">
+                  <input type="text" id="audience" name="audience" placeholder="e.g. Luxury beauty connoisseurs" value="Luxury beauty connoisseurs, couture makeup lovers, and salon clients">
                 </div>
               </div>
             </div>
@@ -257,16 +278,16 @@
               <div class="input-grid">
                 <div class="form-field">
                   <label for="colors">Color Palette (Comma-separated)</label>
-                  <input type="text" id="colors" name="colors" placeholder="e.g. Warm Travertine, Mediterranean Azure, Champagne Gold, Olive Charcoal" value="Warm Travertine, Mediterranean Azure, Champagne Gold, Olive Charcoal">
+                  <input type="text" id="colors" name="colors" placeholder="e.g. #0a0506 (near-black burgundy), #f5ece6 (warm ivory), #c9a675 (beauty gold), #7a1128 (deep beauty)" value="#0a0506 (near-black burgundy), #f5ece6 (warm ivory), #c9a675 (beauty gold), #7a1128 (deep beauty)">
                   <div class="color-chips-preview" id="colorChipsContainer"></div>
                 </div>
                 <div class="form-field">
                   <label for="background">Studio Environment / Backdrop</label>
-                  <input type="text" id="background" name="background" placeholder="e.g. Golden hour sunset over Amalfi cliffs with warm travertine terraces and glowing infinity pools" value="Golden hour sunset over Amalfi cliffs with warm travertine terraces and glowing infinity pools">
+                  <input type="text" id="background" name="background" placeholder="e.g. dark burgundy-to-black gradient background" value="dark burgundy-to-black gradient background">
                 </div>
                 <div class="form-field full-width">
                   <label for="camera">Camera, Lens, Lighting & Color Grading Engine</label>
-                  <textarea id="camera" name="camera" rows="2" placeholder="e.g. ARRI Alexa 65, 85mm T1.5 prime lens, softbox key light, golden rim light, 8k photorealistic...">ARRI Alexa Mini LF, 24mm Ultra Prime lens, golden hour natural light, cinematic drone orbital sweep, 8K architectural grade.</textarea>
+                  <textarea id="camera" name="camera" rows="2" placeholder="e.g. RED cinema camera, 85mm lens at f/4...">RED cinema camera, 85mm lens at f/4, single dramatic softbox key light with rim light, dark burgundy-to-black gradient background, ultra photorealistic 8K, luxury beauty commercial color grading, no text overlay, no watermark.</textarea>
                 </div>
               </div>
             </div>
@@ -290,7 +311,7 @@
                   <div class="story-badge">Stage 1</div>
                   <div class="form-field">
                     <label for="scene1">Opening Genesis Shot</label>
-                    <input type="text" id="scene1" name="scene1" placeholder="Initial raw state or organic origin..." value="A dramatic aerial drone view of rugged Mediterranean coastal cliffs bathed in warm amber sunrise">
+                    <input type="text" id="scene1" name="scene1" placeholder="Initial raw state or organic origin..." value="A single red beautybud on its stem, flower head centered at the exact vertical and horizontal center of frame, unbroken stem visible to bottom edge">
                   </div>
                 </div>
 
@@ -298,7 +319,7 @@
                   <div class="story-badge">Stage 2</div>
                   <div class="form-field">
                     <label for="scene2">First Metamorphosis / Bloom</label>
-                    <input type="text" id="scene2" name="scene2" placeholder="Unfolding or activation..." value="Camera glides over a cantilevered infinity pool reflecting the golden sea horizon">
+                    <input type="text" id="scene2" name="scene2" placeholder="Unfolding or activation..." value="The same red beauty now in complete full MEERUB, outermost beauty details reaching close to frame edges">
                   </div>
                 </div>
 
@@ -306,7 +327,7 @@
                   <div class="story-badge">Stage 3</div>
                   <div class="form-field">
                     <label for="scene3">Material Dissolve / Essence Extraction</label>
-                    <input type="text" id="scene3" name="scene3" placeholder="Transformation into liquid/particles..." value="Floor-to-ceiling motorized glass walls slide open smoothly, blending salon interior with travertine terrace">
+                    <input type="text" id="scene3" name="scene3" placeholder="Transformation into liquid/particles..." value="Beauty details falling and dissolving into liquid beauty artistry, mid-motion capture">
                   </div>
                 </div>
 
@@ -314,7 +335,7 @@
                   <div class="story-badge">Stage 4</div>
                   <div class="form-field">
                     <label for="scene4">Forging / Molding the Product</label>
-                    <input type="text" id="scene4" name="scene4" placeholder="Pigment or material enters mold/chassis..." value="Sunlight cascades through custom Italian walnut louvers across minimalist marble island">
+                    <input type="text" id="scene4" name="scene4" placeholder="Pigment or material enters mold/chassis..." value="Fallen beauty details fully dissolved into molten red beauty artistry pouring into chrome beauty salon mold">
                   </div>
                 </div>
 
@@ -322,7 +343,7 @@
                   <div class="story-badge">Stage 5</div>
                   <div class="form-field">
                     <label for="scene5">Hero Reveal & Application</label>
-                    <input type="text" id="scene5" name="scene5" placeholder="Finished piece presented or applied..." value="Night falls as architectural LED lighting illuminates the villa silhouette overlooking moonlit ocean">
+                    <input type="text" id="scene5" name="scene5" placeholder="Finished piece presented or applied..." value="Finished beauty salon, cap removed, standing upright and centered, sharp clean edges, single dramatic softbox key light">
                   </div>
                 </div>
               </div>
@@ -345,15 +366,15 @@
               <div class="input-grid">
                 <div class="form-field">
                   <label for="productName">Official Product Model Name</label>
-                  <input type="text" id="productName" name="productName" placeholder="e.g. Villa Solaria Amalfi Estate" value="Villa Solaria Amalfi Estate">
+                  <input type="text" id="productName" name="productName" placeholder="e.g. MEERUB Signature Beauty Experience" value="MEERUB Signature Beauty Experience">
                 </div>
                 <div class="form-field">
                   <label for="productType">Product Classification</label>
-                  <input type="text" id="productType" name="productType" placeholder="e.g. Luxury Private Estate" value="Luxury Private Estate (12,000 sq ft)">
+                  <input type="text" id="productType" name="productType" placeholder="e.g. Luxury Beauty Salon & Cosmetic Artistry" value="Luxury Beauty Salon & Cosmetic Artistry">
                 </div>
                 <div class="form-field full-width">
                   <label for="texture">Tactile Textures & Materials</label>
-                  <input type="text" id="texture" name="texture" placeholder="e.g. Hand-chiseled travertine stone, Italian fluted walnut" value="Hand-chiseled travertine stone, Italian fluted walnut, polished Calacatta marble, brushed bronze fixtures">
+                  <input type="text" id="texture" name="texture" placeholder="e.g. Molten red beauty artistry, chrome salon mold..." value="Molten red beauty artistry, chrome salon mold, velvet petal texture, precise matte finish">
                 </div>
                 <div class="form-field">
                   <label for="person">Include Human Model / Lifestyle?</label>
@@ -364,7 +385,7 @@
                 </div>
                 <div class="form-field" id="personDescField">
                   <label for="personDescription">Model Appearance & Casting Cue</label>
-                  <input type="text" id="personDescription" name="personDescription" placeholder="e.g. Elegant homeowner in relaxed linen attire standing on terrace gazing at sunset with a crystal wine glass" value="Elegant homeowner in relaxed linen attire standing on terrace gazing at sunset with a crystal wine glass">
+                  <input type="text" id="personDescription" name="personDescription" placeholder="e.g. Beautiful woman styling beauty salon..." value="The same beauty salon now lifted by woman's hand, front-on symmetrical view, styling rich red beauty salon directly to lips. Strikingly beautiful woman, early twenties, radiant skin, sleek glossy hair, luxury beauty commercial color grading.">
                 </div>
               </div>
             </div>
@@ -386,31 +407,31 @@
               <div class="input-grid">
                 <div class="form-field">
                   <label for="headline">Hero Headline</label>
-                  <input type="text" id="headline" name="headline" placeholder="e.g. VILLA SOLARIA" value="VILLA SOLARIA">
+                  <input type="text" id="headline" name="headline" placeholder="e.g. MEERUB" value="MEERUB">
                 </div>
                 <div class="form-field">
                   <label for="subtitle">Hero Subtitle / Tagline</label>
-                  <input type="text" id="subtitle" name="subtitle" placeholder="e.g. Where Mediterranean serenity meets architectural majesty." value="Where Mediterranean serenity meets architectural majesty.">
+                  <input type="text" id="subtitle" name="subtitle" placeholder="e.g. A beauty, reimagined." value="A beauty, reimagined.">
                 </div>
                 <div class="form-field">
                   <label for="cta">Call to Action (CTA) Button</label>
-                  <input type="text" id="cta" name="cta" placeholder="e.g. Request Private Viewing" value="Request Private Viewing">
+                  <input type="text" id="cta" name="cta" placeholder="e.g. SHOP NOW" value="SHOP NOW">
                 </div>
                 <div class="form-field">
                   <label for="nav">Navigation Links (Comma-separated)</label>
-                  <input type="text" id="nav" name="nav" placeholder="e.g. Architecture, Panorama, Amenities, Acquisition" value="Architecture, Panorama, Amenities, Acquisition">
+                  <input type="text" id="nav" name="nav" placeholder="e.g. MEERUB, SHOP NOW" value="MEERUB, SHOP NOW">
                 </div>
                 <div class="form-field">
                   <label for="section1Title">Section 1 Editorial Title</label>
-                  <input type="text" id="section1Title" name="section1Title" placeholder="e.g. Cantilevered Over Azure Horizons" value="Cantilevered Over Azure Horizons">
+                  <input type="text" id="section1Title" name="section1Title" placeholder="e.g. Beauty Details become beauty artistry." value="Beauty Details become beauty artistry.">
                 </div>
                 <div class="form-field">
                   <label for="section2Title">Section 2 Editorial Title</label>
-                  <input type="text" id="section2Title" name="section2Title" placeholder="e.g. Bespoke Italian Craftsmanship" value="Bespoke Italian Craftsmanship">
+                  <input type="text" id="section2Title" name="section2Title" placeholder="e.g. Beauty Artistry becomes couture." value="Beauty Artistry becomes couture.">
                 </div>
                 <div class="form-field full-width">
                   <label for="copy">Core Brand Narrative / Editorial Paragraph</label>
-                  <textarea id="copy" name="copy" rows="2" placeholder="e.g. Carved into the volcanic cliffs of the Amalfi coast...">Carved into the volcanic cliffs of the Amalfi coast, Villa Solaria offers 12,000 square feet of seamless indoor-outdoor living, private sea access, and panoramic Mediterranean vistas.</textarea>
+                  <textarea id="copy" name="copy" rows="2" placeholder="e.g. One beauty look. Every MEERUB...">One beauty look. Every MEERUB. The fallen beauty details dissolve into molten beauty artistry pouring into a chrome beauty salon mold, cooling and setting into a precise matte final look shape.</textarea>
                 </div>
               </div>
             </div>
@@ -432,12 +453,12 @@
               <div class="input-grid">
                 <div class="form-field">
                   <label for="prefix">Asset Filename Slug / Prefix</label>
-                  <input type="text" id="prefix" name="prefix" placeholder="e.g. solaria" value="solaria">
+                  <input type="text" id="prefix" name="prefix" placeholder="e.g. beauty salon" value="beauty salon">
                   <span class="input-hint">Used for all image, video, and frame naming</span>
                 </div>
                 <div class="form-field">
                   <label for="folder">Project Root Folder Name</label>
-                  <input type="text" id="folder" name="folder" placeholder="e.g. villa-solaria-estate" value="villa-solaria-estate">
+                  <input type="text" id="folder" name="folder" placeholder="e.g. meerub-beauty-salon" value="meerub-beauty-salon">
                 </div>
                 <div class="form-field">
                   <label for="imageCount">Image Prompt Count</label>
@@ -582,14 +603,27 @@
             <div class="section-title-row">
               <div class="section-badge-title">
                 <span class="step-pill">Step 1</span>
-                <h3>AI Image Prompts (Reference Chaining)</h3>
+                <h3>AI Image Prompts (Reference Chaining Sequence)</h3>
               </div>
               <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="allImagesText">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 <span>Copy All Prompts</span>
               </button>
             </div>
-            <p class="section-intro">Generate these images sequentially. Keep consistent optical lighting and background. Use previous images as character/style references.</p>
+            <p class="section-intro">Generate all story images sequentially inside Google Flow using Nano Banana 2. Upload each image as the reference for the next one.</p>
+            
+            <!-- Shared Style Language Box -->
+            <div class="callout-prompt-card" id="sharedStyleCard">
+              <div class="callout-header">
+                <span class="callout-tag">The Shared Style Language (Nano Banana 2)</span>
+                <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="sharedStyleText">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Style</span>
+                </button>
+              </div>
+              <div class="callout-text" id="sharedStyleDisplay"></div>
+            </div>
+
             <div class="cards-grid" id="imageCardsContainer"></div>
           </div>
 
@@ -598,14 +632,59 @@
             <div class="section-title-row">
               <div class="section-badge-title">
                 <span class="step-pill">Step 2</span>
-                <h3>AI Video Motion Prompts (Start/End Frames)</h3>
+                <h3>AI Video Motion Prompts (Start & End Frame Keyframes)</h3>
               </div>
               <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="allVideosText">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 <span>Copy All Video Prompts</span>
               </button>
             </div>
-            <p class="section-intro">Generate slow cinematic clips using the corresponding generated start and end frame images (Runway Gen-3, Luma Dream Machine, Kling, Minimax, Sora).</p>
+            <p class="section-intro">Generate video clips in Veo 3.1 using start and end frame images from Step 1. Veo animates the motion between them.</p>
+
+            <!-- Video Style Fallback Box: Veo 3.1 Style Lock & Drift Remediation -->
+            <div class="callout-prompt-card" id="videoStyleCard">
+              <div class="callout-header">
+                <span class="callout-tag">Veo 3.1 Style Lock & Drift Remediation</span>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="videoStyleText" id="copyVeoFallbackBtn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span>Copy Directive</span>
+                  </button>
+                  <button type="button" class="btn-ghost-sm" id="appendVeoFallbackBtn" title="Append selected fallback directive to all video motion prompts">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>Append to Prompts</span>
+                  </button>
+                </div>
+              </div>
+              <div class="fallback-selector-wrap" style="margin-top: 10px; margin-bottom: 8px;">
+                <label for="veo-fallback-selector" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 600;">Select Style Drift Lock Preset (20 Matrix Options):</label>
+                <select id="veo-fallback-selector" class="form-select-sm" style="width: 100%; padding: 8px 12px; background: rgba(10,5,6,0.9); border: 1px solid var(--border-gold-subtle, rgba(201,166,117,0.25)); color: var(--text-ivory, #f5ece6); border-radius: 6px; font-size: 12.5px; outline: none; cursor: pointer;">
+                  <option value="default" selected>00. Default Cinematic Beauty / Brand Lock</option>
+                  <option value="macro">01. Photorealistic Macro Drift Lock</option>
+                  <option value="film35">02. Cinematic 35mm Film Fidelity</option>
+                  <option value="cyberpunk">03. Hyper-Stylized Cyberpunk & Neon Noir</option>
+                  <option value="architectural">04. Strict Architectural Structural Rigidity</option>
+                  <option value="fluid">05. Fluid Dynamics & Viscosity Lock</option>
+                  <option value="anatomy">06. Natural Anatomical Proportions & Hands</option>
+                  <option value="doc16">07. Documentary 16mm Handheld Realism</option>
+                  <option value="hardlight">08. Hard Light High-Fashion Editorial</option>
+                  <option value="technicolor">09. Vintage 1970s Technicolor Palette</option>
+                  <option value="aerial">10. Atmospheric Aerial FPV Kinetic Consistency</option>
+                  <option value="goldenhour">11. Ethereal Golden Hour Low-Angle Warmth</option>
+                  <option value="noir">12. Monochrome Film Noir & Specular Contrast</option>
+                  <option value="vhs">13. Retro VHS & Analog Video Artifacts</option>
+                  <option value="highspeed">14. High-Speed Action & Motion Clarity</option>
+                  <option value="pastel">15. Soft Studio Pastel Commercial Grade</option>
+                  <option value="claymation">16. Claymation & Stop-Motion Coherence</option>
+                  <option value="weather">17. Dystopian Weather & Particle Density</option>
+                  <option value="steadicam">18. Steadicam Horizon & Perspective Stabilization</option>
+                  <option value="lowpoly">19. Low-Poly Retro 90s Rendering</option>
+                  <option value="zerog">20. Zero-Gravity Weightlessness & Trajectory</option>
+                </select>
+              </div>
+              <div class="callout-text" id="videoStyleDisplay"></div>
+            </div>
+
             <div class="cards-grid" id="videoCardsContainer"></div>
           </div>
 
@@ -614,13 +693,14 @@
             <div class="section-title-row">
               <div class="section-badge-title">
                 <span class="step-pill">Step 3</span>
-                <h3>FFmpeg Merge & Scroll Frame Extraction</h3>
+                <h3>Merge & Prepare the Hero Video (Antigravity FFmpeg)</h3>
               </div>
               <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="ffmpegScriptText">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 <span>Copy Commands</span>
               </button>
             </div>
+            <p class="section-intro">3a — Stitch clips in exact order (hard cuts only). 3b — Re-encode with -g 1 so every frame is a keyframe. 3c — Extract 20fps JPEG frames for HTML5 Canvas.</p>
             <div class="code-terminal-card" id="ffmpegCardsContainer"></div>
           </div>
 
@@ -629,13 +709,26 @@
             <div class="section-title-row">
               <div class="section-badge-title">
                 <span class="step-pill">Step 4</span>
-                <h3>Project Asset Folder Architecture</h3>
+                <h3>Organize Your Project Folder (Antigravity)</h3>
               </div>
               <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="folderTreeText">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 <span>Copy Tree</span>
               </button>
             </div>
+
+            <!-- Folder Organization Prompt Box -->
+            <div class="callout-prompt-card" id="folderOrgCard">
+              <div class="callout-header">
+                <span class="callout-tag">Folder Organization Prompt (Give to Antigravity)</span>
+                <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="folderOrgText">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Folder Prompt</span>
+                </button>
+              </div>
+              <div class="callout-text" id="folderOrgDisplay"></div>
+            </div>
+
             <div class="folder-tree-card" id="folderStructureContainer"></div>
           </div>
 
@@ -644,16 +737,28 @@
             <div class="section-title-row">
               <div class="section-badge-title">
                 <span class="step-pill">Step 5</span>
-                <h3>Full Master AI Website Build Prompt</h3>
+                <h3>Build the Site with One Master Prompt (Antigravity)</h3>
               </div>
               <button type="button" class="btn-ghost-sm copy-btn highlight-btn" data-copy-target="masterPromptText">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                 <span>Copy Master Prompt</span>
               </button>
             </div>
-            <p class="section-intro">Paste this comprehensive prompt directly into your AI Assistant (Antigravity, Claude, Cursor, ChatGPT) to generate the entire web application codebase.</p>
+            <p class="section-intro">Paste this master prompt into Antigravity to generate the complete website with pinned canvas sequence, sticky explainer, horizontal craftsmanship rail, reverse parallax, and look cards.</p>
             <div class="master-prompt-box">
               <pre id="masterPromptDisplay"></pre>
+            </div>
+
+            <!-- Post-Build Refinement Prompt Box -->
+            <div class="callout-prompt-card" id="refinementCard" style="margin-top: 16px;">
+              <div class="callout-header">
+                <span class="callout-tag refine">Once Structure Is Up, Polish It (Refinement Prompt)</span>
+                <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="refinementText">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Refinement Prompt</span>
+                </button>
+              </div>
+              <div class="callout-text" id="refinementDisplay"></div>
             </div>
           </div>
 
@@ -662,13 +767,66 @@
             <div class="section-title-row">
               <div class="section-badge-title">
                 <span class="step-pill">Step 6</span>
-                <h3>Pre-Flight & Production Deploy Checklist</h3>
+                <h3>Deploy: GitHub + Netlify or Vercel (Antigravity)</h3>
               </div>
               <button type="button" class="btn-ghost-sm" id="resetChecklistBtn">
                 <span>Reset Checkbox States</span>
               </button>
             </div>
+
+            <!-- Deploy Prompt Box -->
+            <div class="callout-prompt-card" id="deployPromptCard">
+              <div class="callout-header">
+                <span class="callout-tag deploy">Deploy Prompt (Give to Antigravity)</span>
+                <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="deployPromptText">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Deploy Prompt</span>
+                </button>
+              </div>
+              <div class="callout-text" id="deployPromptDisplay"></div>
+            </div>
+
             <div class="checklist-grid" id="checklistContainer"></div>
+          </div>
+
+          <!-- Section 7: Expanding Your Site (Optional / Going Further) -->
+          <div class="output-section" id="sectionExpansion">
+            <div class="section-title-row">
+              <div class="section-badge-title">
+                <span class="step-pill">Optional</span>
+                <h3>Expanding Your Site & Section Polish Prompts</h3>
+              </div>
+              <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="allExpansionText">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy Expansion Suite</span>
+              </button>
+            </div>
+            <p class="section-intro">Once your core site is live, use these prompts to add product range lineups, packaging shots, second model styling, vanity lifestyle scenes, and surgical section polish.</p>
+            <div class="cards-grid" id="extraImageCardsContainer"></div>
+
+            <!-- Site Expansion Prompt Box -->
+            <div class="callout-prompt-card" id="siteExpansionCard" style="margin-top: 16px;">
+              <div class="callout-header">
+                <span class="callout-tag expand">Site Expansion Prompt (Add New Sections)</span>
+                <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="siteExpansionText">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Site Expansion Prompt</span>
+                </button>
+              </div>
+              <div class="callout-text" id="siteExpansionDisplay"></div>
+            </div>
+
+            <!-- Section Polish Prompt Box -->
+            <div class="callout-prompt-card" id="sectionPolishCard" style="margin-top: 16px;">
+              <div class="callout-header">
+                <span class="callout-tag expand">Polish Any Section That Feels Flat</span>
+                <button type="button" class="btn-ghost-sm copy-btn" data-copy-target="sectionPolishText">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy Section Polish Prompt</span>
+                </button>
+              </div>
+              <div class="callout-text" id="sectionPolishDisplay"></div>
+            </div>
           </div>
 
         </div>

@@ -9,14 +9,15 @@ PromptCraft Studio is a comprehensive, client-side web application for generatin
 
 ## 🚀 Key Features
 
-- **500 Complete Commercial Presets**: Alphabetically indexed across 50 categories (Real Estate, Ecommerce, Fashion, SaaS, Hospitality, Dining, Health, Tech, and more).
-- **Reactive 6-Step Workflow Engine**:
-  - **Step 1 — Image Generation Prompts**: Continuous camera optics, cinematic lighting, and custom aspect ratios.
-  - **Step 2 — Video Generation Prompts**: Fluid start/end frame choreography with motion timing.
-  - **Step 3 — FFmpeg Terminal Automation**: Scripts for merging video clips, re-encoding for web canvas scroll, and 20fps frame extraction.
-  - **Step 4 — Clean Folder Tree**: Standardized lowercase hyphenated project directory structure.
-  - **Step 5 — Master Website Build Prompt**: Comprehensive blueprint with CTA, branding, navigation, sections, and asset bindings.
-  - **Step 6 — Production Deploy Checklist**: Interactive verification checklist tailored to your selected hosting provider.
+- **500+ Complete Commercial Presets**: Including exact, verbatim presets for **MEERUB Beauty Salon** and **BLOOM Luxury Lipstick** build guides.
+- **Exact 6-Step Workflow & Prompt Architecture**:
+  - **Step 1 — Nano Banana 2 Image Prompt Chaining**: Reference chaining prompts (01, 03, 05, 06, 07, 08, 09, 10) with exact shared style language.
+  - **Step 2 — Veo 3.1 Video Motion Prompts**: Start-to-end frame motion choreographies (V01 to V06) with timing and fallback style directives.
+  - **Step 3 — Antigravity FFmpeg Pipeline**: Exact commands for raw merging (3a), keyframe GOP=1 re-encoding (3b), and 20fps JPEG canvas frame extraction (3c).
+  - **Step 4 — Clean Folder Architecture**: Exact folder hierarchy with copyable Antigravity file organization prompt.
+  - **Step 5 — Master Website Build Prompt**: 8-section master blueprint (pinned canvas sequence with progress text overlays, sticky 50/50 explainer, horizontal craftsmanship rail, reverse parallax, look grid, newsletter, footer) + post-build Refinement prompt.
+  - **Step 6 — Production Deploy Prompt & Checklist**: Single-prompt deployment to GitHub + Netlify/Vercel with pre-flight checklist.
+  - **Optional Step 7 — Site Expansion & Section Polish**: Prompts for extra image generation (11-14), site expansion sections, and surgical section polish.
 - **Export & Integration Hub**:
   - **Export PDF**: Clean printable document with monospace code blocks, brand headings, and automatic print triggers.
   - **Download Files**: Export full plan as Markdown (`.md`), Plain Text (`.txt`), Bash Script (`.sh`), or JSON configuration (`.json`).
